@@ -39,51 +39,179 @@
 
     /* Cart Sidebar Transitions */
     #cart-sidebar.open #cart-overlay { opacity: 1; }
-    /* UPDATED: transform: translateY(0) */
     #cart-sidebar.open #cart-content { transform: translateY(0); }
     #cart-overlay { opacity: 0; transition: opacity 0.3s ease-in-out; }
     #cart-content { transition: transform 0.3s ease-in-out; }
 
-    /* ===== Social: LINE Official Account (small + cute, white + green border) ===== */
-.social-line-official {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.90);
-  border: 1px solid rgba(16, 185, 129, 0.55);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.10);
-  text-decoration: none;
-  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
-}
+    /* ===== Floating LINE OA (UPDATED DESIGN) ===== */
+    .line-float-side {
+      position: fixed;
+      right: 20px; /* ขยับออกมานิดนึงให้ดูไม่ชิดขอบเกินไป */
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 9999;
+    }
 
-.social-line-official:hover {
-  transform: translateY(-1px);
-  background: rgba(236, 253, 245, 0.85); /* emerald-50 vibe */
-  box-shadow: 0 8px 18px rgba(0,0,0,0.14);
-}
+    /* Animation: Pulse เพื่อดึงดูดสายตา */
+    @keyframes line-pulse {
+      0% { box-shadow: 0 0 0 0 rgba(6, 199, 85, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(6, 199, 85, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(6, 199, 85, 0); }
+    }
 
-.social-line-official .line-icon {
-  font-size: 22px; 
-  color: #16a34a; /* emerald-600 */
-}
+    .line-float-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px; 
+      border-radius: 99px; /* ทรงแคปซูล */
+      
+      /* New Style: LINE Green Background (High Visibility) */
+      background: #06C755; 
+      color: white;
+      
+      /* White border to make it pop against any background */
+      border: 2px solid #ffffff; 
+      
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      
+      /* Apply pulse animation */
+      animation: line-pulse 2s infinite;
+    }
 
-.social-line-official .label {
-  font-size: 13px;
-  font-weight: 800;
-  color: #065f46; /* emerald-800 */
-  letter-spacing: .2px;
-  white-space: nowrap;
-}
+    .line-float-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+      background: #05b54d; /* Darker green on hover */
+    }
 
-/* มือถือ: ยังแสดงข้อความ แต่สั้นลงนิดเพื่อไม่กินที่ */
-@media (max-width: 480px) {
-  .social-line-official { padding: 7px 10px; gap: 6px; }
-  .social-line-official .label { font-size: 12px; }
-  .social-line-official .line-icon { font-size: 20px; }
-}
+    .line-float-icon {
+      /* Icon สีขาว ไม่มีพื้นหลังแยก เพื่อความสะอาดตา */
+      width: 32px;
+      height: 32px;
+      display: flex; /* ใช้ flex แทน grid เพื่อจัดกึ่งกลางง่ายๆ */
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: white;
+      flex: 0 0 auto;
+    }
 
+    .line-float-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+      color: white; /* Text สีขาว */
+      white-space: nowrap;
+    }
+
+    .line-float-title {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .line-float-sub {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.9); /* สีขาวจางนิดๆ */
+      margin-top: 1px;
+    }
+
+    /* Bubble (มือถือ: แตะแล้วขึ้นป้าย 2 วิ) */
+    .line-oa-bubble {
+      position: absolute;
+      right: 60px; /* ขยับให้พ้นปุ่มที่ใหญ่ขึ้น */
+      top: 50%;
+      transform: translateY(-50%) scale(0.9);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+      background: #fff;
+      color: #333;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      border-radius: 12px;
+      padding: 10px 14px;
+      min-width: 180px;
+      z-index: -1; /* อยู่ใต้ปุ่ม */
+    }
+    .line-oa-bubble.show {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+      right: calc(100% + 10px); /* ให้ bubble เด้งออกมาทางซ้ายของปุ่มเสมอ */
+    }
+    .line-oa-bubble:after {
+      content: "";
+      position: absolute;
+      right: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-left: 6px solid #fff;
+    }
+    .line-oa-bubble-title { font-weight: 800; font-size: 12px; color: #06C755; }
+    .line-oa-bubble-sub { font-size: 11px; color: #4b5563; margin-top: 2px; }
+
+    /* มือถือ: ปรับให้กะทัดรัด แต่ยังเห็นข้อความสำคัญ */
+    @media (max-width: 480px) {
+      .line-float-side {
+        right: 16px;
+        top: auto;
+        bottom: 110px; /* ตำแหน่งเดิม */
+        transform: none;
+      }
+
+      .line-float-btn {
+        gap: 6px; /* ลดช่องว่าง */
+        padding: 8px 14px; /* ลด padding */
+        border-radius: 50px;
+        /* เอฟเฟกต์ pulse แรงขึ้นนิดนึงในมือถือให้สังเกตง่าย */
+        animation: line-pulse 3s infinite;
+      }
+
+      .line-float-icon {
+        font-size: 22px; /* ลดขนาดไอคอนนิดนึง */
+        width: auto; 
+        height: auto;
+      }
+
+      .line-float-text {
+        display: block; /* สำคัญ: เปิดให้เห็นข้อความบนมือถือ */
+      }
+      
+      .line-float-title {
+        font-size: 14px; /* ขนาดตัวอักษรที่อ่านง่าย */
+        line-height: 1;
+      }
+
+      /* ซ่อนคำบรรยายยาวๆ ในมือถือ เพื่อไม่ให้ปุ่มใหญ่เกินไป */
+      .line-float-sub {
+        display: none; 
+      }
+
+      /* ซ่อน soft hint ใต้ปุ่มบนมือถือ */
+      #line-oa-float .line-soft-hint {
+        display: none;
+      }
+    }
+
+    /* ===== Edge-only Drag LINE OA ===== */
+    #line-oa-float{
+      touch-action: none;
+    }
+    #line-oa-float.is-dragging{
+      user-select: none;
+      cursor: grabbing;
+      transition: none; /* ลากลื่นๆ ไม่หน่วง */
+    }
+    #line-oa-float.is-dragging .line-float-btn {
+        transform: scale(0.95); /* หดนิดนึงตอนลาก */
+        animation: none; /* หยุดเต้นตอนลาก */
+    }
   </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
@@ -98,29 +226,16 @@
     </div>
 
     <!-- Social -->
-<div class="flex flex-col items-center mb-6">
-  <!-- แถวบน: TikTok + IG -->
-  <div class="flex justify-center items-center gap-6 text-2xl text-gray-800 mb-2">
-    <a href="https://www.tiktok.com/@vervejuice.th" class="hover:text-emerald-600" target="_blank" aria-label="TikTok">
-      <i class="fa-brands fa-tiktok"></i>
-    </a>
-    <a href="https://www.instagram.com/vervejuice.th" class="hover:text-emerald-600" target="_blank" aria-label="Instagram">
-      <i class="fa-brands fa-instagram"></i>
-    </a>
-  </div>
+    <div class="flex justify-center space-x-6 mb-6 text-2xl text-gray-800">
+      <a href="https://www.tiktok.com/@vervejuice.th" class="hover:text-emerald-600" target="_blank" aria-label="TikTok">
+        <i class="fa-brands fa-tiktok"></i>
+      </a>
+      <a href="https://www.instagram.com/vervejuice.th" class="hover:text-emerald-600" target="_blank" aria-label="Instagram">
+        <i class="fa-brands fa-instagram"></i>
+      </a>
+    </div>
 
-  <!-- แถวล่าง: LINE (เล็กๆน่ารัก แต่เด่นกว่า) -->
-  <a href="https://lin.ee/Z5hDNAQ"
-     class="social-line-official"
-     target="_blank"
-     rel="noopener"
-     aria-label="Line Official Account">
-    <i class="fa-brands fa-line line-icon"></i>
-    <span class="label">Verve Juice OA</span>
-  </a>
-</div>
-
-    <!-- NEW: Announcement Box -->
+    <!-- Announcement Box -->
     <div class="mb-6 p-4 bg-white/80 rounded-2xl border border-emerald-200 text-sm text-gray-800 space-y-3">
       <div>
         <p class="font-bold text-center text-emerald-700">📍 สถานที่จัดส่ง 📍</p>
@@ -131,7 +246,7 @@
       <hr class="border-dashed border-emerald-200">
       <div>
         <p class="font-bold text-center text-emerald-700">🍹 ประกาศ 🍹</p>
-        <p class="text-center">ตอนนี้ Verve Juice มี Line Official Account แล้วน้า สามารถเข้าไปเพิ่มเพื่อนและพิมพ์ "ขอส่วนลด 5%" กันได้นะครับ🎉</p>
+        <p class="text-center">ตอนนี้ Verve Juice มี Line Official Account แล้วน้า สามารถเข้าไปเพิ่มเพื่อนและพิมพ์ "ส่วนลด" เพื่อรับส่วนลด 10% กันได้นะครับ🎉</p>
       </div>
     </div>
 
@@ -160,14 +275,11 @@
                class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-300" />
       </div>
 
-      <!-- NEW: เลือกสถานที่จัดส่งก่อน -->
       <div>
         <label for="deliveryLocation" class="block text-gray-700 font-bold mb-2">เลือกสถานที่จัดส่ง*</label>
-
             <p class="text-xs text-red-600 mt-1">
-                กรณีที่อยู่นอกพื้นที่จัดส่งสามารถทักมาสอบถามรายละเอียดได้ที่ Line Official Account
+                กรณีที่อยู่นอกพื้นที่จัดส่งสามารถทักมาสอบถามรายละเอียดได้ที่ Line OA ครับ
             </p>
-
         <select id="deliveryLocation"
                 class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-300 bg-white">
           <option value="">-- กรุณาเลือกสถานที่จัดส่ง --</option>
@@ -299,11 +411,8 @@
 
 <!-- Cart Sidebar -->
 <div id="cart-sidebar" class="fixed inset-0 z-50 flex items-end hidden">
-  <!-- Overlay -->
   <div id="cart-overlay" class="absolute inset-0 bg-black bg-opacity-30"></div>
-  <!-- Content -->
   <div id="cart-content" class="relative w-full max-w-lg mx-auto bg-white max-h-[90vh] shadow-xl transform translate-y-full flex flex-col rounded-t-2xl">
-    <!-- Header -->
     <div class="flex-shrink-0 p-4 border-b sticky top-0 bg-white z-10 rounded-t-2xl">
       <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-3"></div>
       <div class="flex justify-between items-center">
@@ -311,9 +420,7 @@
         <button id="close-cart-btn" class="text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
       </div>
     </div>
-    <!-- Item List -->
     <div id="cart-items-list" class="flex-1 overflow-y-auto p-4 space-y-4"></div>
-    <!-- Footer -->
     <div class="flex-shrink-0 p-4 border-t bg-gray-50 sticky bottom-0 z-10">
       <div class="flex justify-between items-center text-lg">
         <span class="font-bold">ยอดรวม</span>
@@ -333,16 +440,43 @@
   </button>
 </div>
 
+<!-- Floating LINE OA Button (UPDATED) -->
+<div id="line-oa-float" class="line-float-side" aria-label="LINE OA Floating Button">
+  <!-- bubble (ซ่อน by default, โชว์เมื่อแตะบนมือถือหรือ hover) -->
+  <div id="line-oa-bubble" class="line-oa-bubble" role="status" aria-live="polite">
+    <div class="line-oa-bubble-title">ทัก LINE ร้าน Verve Juice</div>
+    <div class="line-oa-bubble-sub">สอบถาม / สั่งสินค้า / เช็ครอบส่ง</div>
+  </div>
+
+  <a id="line-oa-link"
+     class="line-float-btn"
+     href="https://lin.ee/Z5hDNAQ"
+     target="_blank"
+     rel="noopener"
+     title="ทัก LINE ร้าน Verve Juice">
+    <div class="line-float-icon">
+      <i class="fa-brands fa-line"></i>
+    </div>
+    <div class="line-float-text">
+      <!-- บนมือถือจะแสดงแค่ Title สั้นๆ ส่วน Subtitle ซ่อนไว้ -->
+      <div class="line-float-title">สอบถาม</div>
+      <div class="line-float-sub">สั่งสินค้า / เช็ครอบส่ง</div>
+    </div>
+  </a>
+  
+  <div class="line-soft-hint mt-2 text-[11px] text-gray-500 text-center leading-snug bg-white/50 rounded px-1 backdrop-blur-sm">
+     * ทักก่อนโอน
+  </div>
+</div>
+
 <script>
 window.getEl = id => document.getElementById(id);
 
-// --- GLOBAL STATE ---
 let order = { items:{}, total:0, subtotal:0, discount:null, totalItems:0 };
 let menu = [];
 let updateTotal = () => {};
 let renderCartSidebarContent = () => {};
 
-// ===== MODAL (เลือกเมนู/แพ้ส่วนผสม) =====
 window.changeModalQty = (inputId, change) => {
   const qtyInput = getEl(inputId);
   let currentQty = parseInt(qtyInput.value);
@@ -503,22 +637,143 @@ renderCartSidebarContent = () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  // CONFIG: ตั้งค่าพื้นที่จัดส่ง + วันในสัปดาห์ที่สามารถไปส่งได้
-  // getDay() ของ JS: 0=อาทิตย์, 1=จันทร์, 2=อังคาร, 3=พุธ, 4=พฤหัส, 5=ศุกร์, 6=เสาร์
+  const lineLink = getEl('line-oa-link');
+  const lineBubble = getEl('line-oa-bubble');
+  let bubbleTimer = null;
+  let armedToOpen = false;
+
+  const isMobile = () => window.matchMedia('(max-width: 480px)').matches;
+
+  const showLineBubble = () => {
+    if (!lineBubble) return;
+    lineBubble.classList.add('show');
+    armedToOpen = true;
+
+    clearTimeout(bubbleTimer);
+    bubbleTimer = setTimeout(() => {
+      lineBubble.classList.remove('show');
+      armedToOpen = false;
+    }, 3000); // เพิ่มเวลาโชว์ Bubble นิดนึงเป็น 3 วิ
+  };
+
+  const lineFloat = getEl('line-oa-float');
+
+if (lineFloat) {
+  lineFloat.style.right = 'auto';
+  lineFloat.style.bottom = 'auto';
+  lineFloat.style.top = 'auto';
+
+  const GAP = 8;
+  const LONG_PRESS_MS = 400; 
+  const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
+  const pickEdge = (x) => (x < window.innerWidth / 2 ? 'left' : 'right');
+
+  const applyEdgeY = (edge, y) => {
+    const rect = lineFloat.getBoundingClientRect();
+    const maxY = window.innerHeight - rect.height - GAP;
+    const top = clamp(y, GAP, maxY);
+    const left =
+      edge === 'left'
+        ? GAP
+        : window.innerWidth - rect.width - GAP;
+
+    lineFloat.style.left = `${left}px`;
+    lineFloat.style.top = `${top}px`;
+    return { edge, y: top };
+  };
+
+  try {
+    const saved = JSON.parse(localStorage.getItem('lineOA_pos') || 'null');
+    if (saved?.edge) {
+      requestAnimationFrame(() => applyEdgeY(saved.edge, saved.y));
+    } else {
+      requestAnimationFrame(() =>
+        applyEdgeY('right', window.innerHeight - 180)
+      );
+    }
+  } catch {
+    requestAnimationFrame(() =>
+      applyEdgeY('right', window.innerHeight - 180)
+    );
+  }
+
+  let pressTimer = null;
+  let dragging = false;
+  let startY = 0;
+  let baseTop = 0;
+  let edge = 'right';
+
+  lineFloat.addEventListener('pointerdown', (e) => {
+    dragging = false;
+    startY = e.clientY;
+    baseTop = lineFloat.getBoundingClientRect().top;
+    edge = pickEdge(e.clientX);
+
+    pressTimer = setTimeout(() => {
+      dragging = true;
+      lineFloat.classList.add('is-dragging');
+      lineFloat.setPointerCapture?.(e.pointerId);
+    }, LONG_PRESS_MS);
+  });
+
+  window.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    e.preventDefault();
+    const dy = e.clientY - startY;
+    applyEdgeY(edge, baseTop + dy);
+  }, { passive: false });
+
+  window.addEventListener('pointerup', () => {
+    clearTimeout(pressTimer);
+    if (dragging) {
+      const rect = lineFloat.getBoundingClientRect();
+      const finalEdge = pickEdge(rect.left + rect.width / 2);
+      const pos = applyEdgeY(finalEdge, rect.top);
+      localStorage.setItem('lineOA_pos', JSON.stringify({ edge: pos.edge, y: pos.y }));
+    }
+    dragging = false;
+    lineFloat.classList.remove('is-dragging');
+  });
+
+  window.addEventListener('resize', () => {
+    const rect = lineFloat.getBoundingClientRect();
+    const finalEdge = pickEdge(rect.left + rect.width / 2);
+    const pos = applyEdgeY(finalEdge, rect.top);
+    localStorage.setItem('lineOA_pos', JSON.stringify(pos));
+  });
+}
+
+  if (lineLink) {
+    lineLink.addEventListener('click', (e) => {
+      // Desktop: เปิด LINE ได้เลย
+      if (!isMobile()) return;
+
+      const floatEl = getEl('line-oa-float');
+      if (floatEl && floatEl.classList.contains('is-dragging')) {
+        e.preventDefault();
+        return;
+      }
+
+      // Mobile: tap แรกโชว์ bubble + พร้อมเปิด
+      if (!armedToOpen) {
+        e.preventDefault();
+        showLineBubble();
+        return;
+      }
+    }, { passive: false });
+  }
+
   const deliveryConfig = {
     sathorn: {
       label: 'สาทร / ตึก Park Silom',
-      weekdays: [1, 2, 3] // จันทร์-พุธ
+      weekdays: [1, 2, 3] 
     },
     sainoi: {
       label: 'ไทรน้อย / หมู่บ้านชวนชม',
-      weekdays: [1, 2, 3, 4, 5] // พฤหัส-ศุกร์ (ปรับได้เลยตามรอบจริง)
+      weekdays: [1, 2, 3, 4, 5] 
     }
-    // ถ้าอนาคตมีพื้นที่อื่น เพิ่ม key เพิ่มได้ เช่น:
-    // otherArea: { label: 'พื้นที่อื่น', weekdays: [2,5] }
   };
 
-  // จำนวนสัปดาห์ล่วงหน้าที่จะแสดง (เหมือน “อาทิตย์ต่ออาทิตย์” ไม่โชว์ยาวทั้งเดือน)
   const DELIVERY_WEEKS_AHEAD = 1;
 
   const local_menu = [
@@ -532,10 +787,10 @@ document.addEventListener('DOMContentLoaded', () => {
     { id:'recharge-me',  name:'Recharge Me',  ingredients:'แอปเปิ้ล, ขิง, มะนาว', properties:'กระตุ้นร่างกายให้ฟื้นตัวจากการเมื่อยล้า', imageUrl:'https://github.com/kornkawes/VerveImage/blob/main/recharge%20me.jpg?raw=true', sizes: [{size:'250ml', price:89}, {size:'300ml', price:109}]},
   ];
   const local_discountCodes = [
-    { code:"SUCHATANDSOMPOP", type:"percent", value:15, expiryDate:"2025-12-31", minSpend:0, minItems:5 },
-    { code:"VERVETIKTOK", type:"percent", value:10, expiryDate:"2025-09-30", minSpend:0, minItems:3 }
+    { code:"VJLINE10", type:"percent", value:10, expiryDate:"2025-12-31", minSpend:0, minItems:3, maxDiscount:40 },
+    { code:"VERVETIKTOK", type:"fixed", value:20, expiryDate:"2025-12-31", minSpend:0, minItems:3, maxDiscount:20 }
   ];
-  const n8nWebhookUrl = "https://n8n-verve-u61532.vm.elestio.app/webhook-test/3292a5c3-0f7f-424f-92f8-7dc42f51d763";
+  const n8nWebhookUrl = "https://n8n-verve-u61532.vm.elestio.app/webhook/3292a5c3-0f7f-424f-92f8-7dc42f51d763";
 
   menu = local_menu;
 
@@ -592,7 +847,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // สร้าง list ของวันที่ส่งได้สำหรับแต่ละพื้นที่ จาก config + จำนวนสัปดาห์ล่วงหน้า
   const generateDeliveryDatesForLocation = (locationKey) => {
     const cfg = deliveryConfig[locationKey];
     if (!cfg || !cfg.weekdays || cfg.weekdays.length === 0) return [];
@@ -605,7 +859,7 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let i = 0; i < totalDays; i++) {
       const d = new Date(today);
       d.setDate(today.getDate() + i);
-      const dow = d.getDay(); // 0-6
+      const dow = d.getDay(); 
       if (cfg.weekdays.includes(dow)) {
         const yyyy = d.getFullYear();
         const mm = String(d.getMonth() + 1).padStart(2, '0');
@@ -625,7 +879,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const now = new Date();
-    const cutoffHours = 12; // ตัดรอบล่วงหน้า 12 ชม. (เหมือนของเดิม)
+    const cutoffHours = 12;
     const cutoffMs = cutoffHours * 60 * 60 * 1000;
 
     const availableDateStrings = generateDeliveryDatesForLocation(locationKey);
@@ -682,8 +936,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let discountValue = 0;
     if (order.discount) {
-      discountValue = order.discount.type === 'percent' ? (subtotal * order.discount.value) / 100 : order.discount.value;
+      discountValue = order.discount.type === 'percent' 
+        ? (subtotal * order.discount.value) / 100 
+        : order.discount.value;
+
+      if (typeof order.discount.maxDiscount === 'number') {
+        discountValue = Math.min(discountValue, order.discount.maxDiscount);
+      }
     }
+
     order.total = Math.max(0, subtotal - discountValue);
 
     if (subtotalPriceEl) subtotalPriceEl.textContent = `฿${(order.subtotal || 0).toFixed(2)}`;
@@ -756,7 +1017,13 @@ document.addEventListener('DOMContentLoaded', () => {
       let summaryHTML = `<div class="mt-2 pt-2 border-t text-sm text-right">`;
       summaryHTML += `<p>ยอดรวม: ฿${data.subtotal.toFixed(2)}</p>`;
       if (data.discount) {
-        const discountAmount = data.discount.type === 'fixed' ? data.discount.value : (data.subtotal * data.discount.value) / 100;
+        let discountAmount =
+          data.discount.type === 'fixed'
+            ? data.discount.value
+            : (data.subtotal * data.discount.value) / 100;
+        if (typeof data.discount.maxDiscount === 'number') {
+          discountAmount = Math.min(discountAmount, data.discount.maxDiscount);
+        }
         summaryHTML += `<p class="text-red-500">ส่วนลด (${data.discount.code}): -฿${discountAmount.toFixed(2)}</p>`;
       }
       summaryHTML += `<p class="text-base font-bold mt-1">ยอดสุทธิ: <span class="text-xl text-emerald-600">฿${data.total.toFixed(2)}</span></p></div>`;
@@ -893,7 +1160,6 @@ document.addEventListener('DOMContentLoaded', () => {
     deliveryWarningEl.classList.toggle('hidden', selectedCount <= 1);
   });
 
-  // เมื่อเลือกสถานที่จัดส่ง ให้ render วันจัดส่งของพื้นที่นั้น
   deliveryLocationEl.addEventListener('change', () => {
     const key = deliveryLocationEl.value;
     renderDeliveryDates(key);
@@ -901,11 +1167,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   renderMenu();
   updateTotal();
-  // แรกเข้าให้ขึ้นข้อความ “กรุณาเลือกสถานที่จัดส่งก่อน”
   renderDeliveryDates();
 });
 </script>
 </body>
 </html>
-
-
