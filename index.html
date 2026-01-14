@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universal Trip Splitter</title>
+    <title>Trip Splitter</title>
     
     <!-- React & ReactDOM -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -21,6 +21,16 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', 'Noto Sans Thai', sans-serif; }
+        
+        /* Custom Checkbox Style */
+        .person-checkbox:checked + div {
+            background-color: #eff6ff; /* blue-50 */
+            border-color: #3b82f6; /* blue-500 */
+            color: #1d4ed8; /* blue-700 */
+        }
+        .person-checkbox:checked + div .check-icon {
+            display: block;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -30,23 +40,24 @@
     <script type="text/babel">
         const { useState, useRef, useEffect } = React;
 
-        // --- ICONS (Inline SVGs to avoid dependencies) ---
+        // --- ICONS ---
         const Icons = {
             Plus: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M5 12h14"/><path d="M12 5v14"/></svg>,
             Trash2: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>,
-            Calculator: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>,
-            ShoppingBag: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>,
-            Users: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
-            User: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
             Receipt: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17V7"/></svg>,
             Download: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>,
             X: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>,
             Globe: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>,
-            Settings: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.47a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.39a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            Settings: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.47a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.39a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>,
+            Users: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+            User: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
+            Calendar: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>,
+            Refresh: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>,
+            Check: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><polyline points="20 6 9 17 4 12"/></svg>
         };
 
         function App() {
-            // State for People (Generic Default)
+            // --- STATE ---
             const [people, setPeople] = useState([
                 { id: 'me', name: 'Me', isMe: true },
                 { id: 'p2', name: 'Friend', isMe: false }
@@ -54,18 +65,34 @@
             const [newPersonName, setNewPersonName] = useState('');
             const [showPeopleManager, setShowPeopleManager] = useState(false);
 
-            // State for Items (Generic Examples)
+            // Item State
+            // item.assignedTo is now ALWAYS an array of IDs ['me', 'p2']
             const [items, setItems] = useState([
-                { id: 1, name: 'Dinner', amount: 350, type: 'shared', assignedTo: 'all' },
-                { id: 2, name: 'Souvenirs', amount: 500, type: 'personal', assignedTo: 'p2' },
-                { id: 3, name: 'My Coffee', amount: 120, type: 'personal', assignedTo: 'me' },
+                { id: 1, name: 'Dinner', amount: 350, assignedTo: ['me', 'p2'], date: new Date().toISOString().split('T')[0] },
+                { id: 2, name: 'Souvenirs', amount: 500, assignedTo: ['p2'], date: new Date().toISOString().split('T')[0] },
             ]);
             
+            // Form State
             const [newItemName, setNewItemName] = useState('');
             const [newItemAmount, setNewItemAmount] = useState('');
-            const [assignee, setAssignee] = useState('all'); // 'all' = shared, or personId
+            const [newItemDate, setNewItemDate] = useState(new Date().toISOString().split('T')[0]);
             
+            // Multi-select Assignee State
+            const [selectedAssignees, setSelectedAssignees] = useState([]); // Array of IDs
+
+            // Initialize selectedAssignees with all people when people change (optional, but good UX)
+            useEffect(() => {
+                if (selectedAssignees.length === 0 && people.length > 0) {
+                     setSelectedAssignees(people.map(p => p.id));
+                }
+            }, [people]);
+
+            // Currency State
             const [currencyRate, setCurrencyRate] = useState(1);
+            const [baseCurrency, setBaseCurrency] = useState('THB'); // Default base currency for rate fetching
+            const [isFetchingRate, setIsFetchingRate] = useState(false);
+            
+            // UI State
             const [showSlip, setShowSlip] = useState(false);
             const [tripName, setTripName] = useState('International Trip');
             const slipRef = useRef(null);
@@ -75,59 +102,123 @@
                 e.preventDefault();
                 if (!newPersonName.trim()) return;
                 const newPerson = {
-                id: `p${Date.now()}`,
-                name: newPersonName.trim(),
-                isMe: false
+                    id: `p${Date.now()}`,
+                    name: newPersonName.trim(),
+                    isMe: false
                 };
                 setPeople([...people, newPerson]);
+                // Automatically add new person to selection for convenience
+                setSelectedAssignees(prev => [...prev, newPerson.id]);
                 setNewPersonName('');
             };
 
             const handleRemovePerson = (id) => {
-                if (people.length <= 1) return; // Keep at least one
+                if (people.length <= 1) return;
                 setPeople(people.filter(p => p.id !== id));
-                if (assignee === id) setAssignee('all');
+                setSelectedAssignees(prev => prev.filter(pid => pid !== id));
             };
 
             // --- ITEM MANAGEMENT ---
+            const toggleAssignee = (id) => {
+                if (selectedAssignees.includes(id)) {
+                    // Prevent removing the last person (at least one must be selected)
+                    if (selectedAssignees.length > 1) {
+                        setSelectedAssignees(prev => prev.filter(pid => pid !== id));
+                    }
+                } else {
+                    setSelectedAssignees(prev => [...prev, id]);
+                }
+            };
+
+            const selectAllAssignees = () => {
+                setSelectedAssignees(people.map(p => p.id));
+            };
+
             const handleAddItem = (e) => {
                 e.preventDefault();
-                if (!newItemName || !newItemAmount) return;
+                if (!newItemName || !newItemAmount || selectedAssignees.length === 0) return;
 
                 const newItem = {
-                id: Date.now(),
-                name: newItemName,
-                amount: parseFloat(newItemAmount),
-                type: assignee === 'all' ? 'shared' : 'personal',
-                assignedTo: assignee,
+                    id: Date.now(),
+                    name: newItemName,
+                    amount: parseFloat(newItemAmount),
+                    assignedTo: [...selectedAssignees], // Copy array
+                    date: newItemDate
                 };
 
                 setItems([...items, newItem]);
                 setNewItemName('');
                 setNewItemAmount('');
+                // Date stays same (convenient for adding multiple items for same day)
+                // Selection stays same
             };
 
             const handleDeleteItem = (id) => {
                 setItems(items.filter(item => item.id !== id));
             };
 
-            // --- CALCULATIONS ---
-            const totalSharedForeign = items
-                .filter(i => i.type === 'shared' || i.assignedTo === 'all')
-                .reduce((sum, i) => sum + i.amount, 0);
-
-            const sharedPerPersonForeign = people.length > 0 ? totalSharedForeign / people.length : 0;
-
-            const calculatePersonDebt = (personId) => {
-                const personalSumForeign = items
-                .filter(i => i.type === 'personal' && i.assignedTo === personId)
-                .reduce((sum, i) => sum + i.amount, 0);
+            // --- RATE FETCHING ---
+            const fetchRate = async () => {
+                if (baseCurrency === 'THB') {
+                    setCurrencyRate(1);
+                    return;
+                }
                 
-                const totalForeign = sharedPerPersonForeign + personalSumForeign;
-                return totalForeign * currencyRate;
+                setIsFetchingRate(true);
+                try {
+                    // Using open.er-api.com (free, no key)
+                    const response = await fetch(`https://open.er-api.com/v6/latest/${baseCurrency}`);
+                    const data = await response.json();
+                    if (data && data.rates && data.rates.THB) {
+                        setCurrencyRate(data.rates.THB);
+                    } else {
+                        alert("Could not fetch rate automatically. Please enter manually.");
+                    }
+                } catch (error) {
+                    console.error("Rate fetch error:", error);
+                    alert("Network error fetching rate.");
+                } finally {
+                    setIsFetchingRate(false);
+                }
             };
 
-            const totalSharedTHB = totalSharedForeign * currencyRate;
+            // --- CALCULATIONS ---
+            const calculatePersonDebt = (personId) => {
+                let debt = 0;
+                items.forEach(item => {
+                    if (item.assignedTo.includes(personId)) {
+                        // Amount divided by number of people sharing this item
+                        debt += item.amount / item.assignedTo.length;
+                    }
+                });
+                return debt * currencyRate;
+            };
+
+            // Total cost of trip (foreign)
+            const totalTripForeign = items.reduce((sum, item) => sum + item.amount, 0);
+            
+            // Total Shared Pool (Anything with > 1 person)
+            const totalSharedForeign = items
+                .filter(i => i.assignedTo.length > 1)
+                .reduce((sum, i) => sum + i.amount, 0);
+
+            // --- HELPERS ---
+            const getAssigneeText = (assigneeIds) => {
+                if (assigneeIds.length === people.length) return "Shared (All)";
+                if (assigneeIds.length === 1) {
+                    const person = people.find(p => p.id === assigneeIds[0]);
+                    return `Personal: ${person ? person.name : 'Unknown'}`;
+                }
+                // Partial share
+                const names = assigneeIds.map(id => people.find(p => p.id === id)?.name).join(', ');
+                return `Shared: ${names}`;
+            };
+            
+            const formatDate = (dateString) => {
+                if (!dateString) return '';
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+            };
 
             // --- IMAGE GENERATION ---
             const handleDownloadImage = async () => {
@@ -140,7 +231,7 @@
                     useCORS: true
                     });
                     const link = document.createElement('a');
-                    link.download = `Trip_Split_Slip_${Date.now()}.png`;
+                    link.download = `Trip_Slip_${tripName.replace(/\s+/g, '_')}_${Date.now()}.png`;
                     link.href = canvas.toDataURL('image/png');
                     link.click();
                 } catch (err) {
@@ -150,11 +241,9 @@
                 }
             };
 
-            const getPersonName = (id) => people.find(p => p.id === id)?.name || 'Unknown';
-
             return (
-                <div className="min-h-screen p-4 md:p-8 relative">
-                    <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+                <div className="min-h-screen p-4 md:p-8 relative pb-24">
+                    <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 mb-8">
                     
                         {/* Header */}
                         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white">
@@ -172,27 +261,18 @@
                                         placeholder="Enter Trip Name..."
                                     />
                                 </div>
-                                <div className="flex gap-2">
-                                    <button 
-                                        onClick={() => setShowPeopleManager(!showPeopleManager)}
-                                        className="bg-white/20 hover:bg-white/30 text-white p-2 rounded-lg transition backdrop-blur-sm flex flex-col items-center text-[10px] gap-1"
-                                    >
-                                        <Icons.Settings className="w-5 h-5" />
-                                        <span>People</span>
-                                    </button>
-                                    <button 
-                                        onClick={() => setShowSlip(true)}
-                                        className="bg-white/20 hover:bg-white/30 text-white p-2 rounded-lg transition backdrop-blur-sm flex flex-col items-center text-[10px] gap-1"
-                                    >
-                                        <Icons.Receipt className="w-5 h-5" />
-                                        <span>Slip</span>
-                                    </button>
-                                </div>
+                                <button 
+                                    onClick={() => setShowPeopleManager(!showPeopleManager)}
+                                    className="bg-white/20 hover:bg-white/30 text-white p-2 rounded-lg transition backdrop-blur-sm flex flex-col items-center text-[10px] gap-1"
+                                >
+                                    <Icons.Settings className="w-5 h-5" />
+                                    <span>People</span>
+                                </button>
                             </div>
 
                             {/* People Manager Drawer */}
                             {showPeopleManager && (
-                                <div className="bg-white/10 rounded-xl p-4 backdrop-blur-md border border-white/20 animate-in fade-in slide-in-from-top-2">
+                                <div className="bg-white/10 rounded-xl p-4 backdrop-blur-md border border-white/20 animate-in fade-in slide-in-from-top-2 mb-4">
                                     <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
                                         <Icons.Users className="w-4 h-4" /> Manage People
                                     </h3>
@@ -221,26 +301,42 @@
                             )}
                         </div>
 
-                        {/* Rate Settings */}
+                        {/* Rate Settings (Real-time) */}
                         <div className="p-4 bg-blue-50 border-b border-blue-100 flex flex-col sm:flex-row gap-4 items-center justify-between">
-                            <div className="text-sm text-gray-600 flex items-center gap-2">
-                                <span className="font-semibold text-blue-700">Exchange Rate:</span> 
-                                <a 
-                                href="https://www.google.com/finance" 
-                                target="_blank" 
-                                rel="noreferrer"
-                                className="text-[10px] bg-white border border-blue-200 px-2 py-0.5 rounded text-blue-500 hover:text-blue-700 flex items-center gap-1"
+                            <div className="flex items-center gap-2">
+                                <select 
+                                    value={baseCurrency}
+                                    onChange={(e) => setBaseCurrency(e.target.value)}
+                                    className="bg-white border border-blue-200 text-blue-800 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2"
                                 >
-                                Check Rate <Icons.Globe className="w-3 h-3"/>
-                                </a>
+                                    <option value="CNY">CNY (China)</option>
+                                    <option value="JPY">JPY (Japan)</option>
+                                    <option value="KRW">KRW (Korea)</option>
+                                    <option value="USD">USD (USA)</option>
+                                    <option value="EUR">EUR (Europe)</option>
+                                    <option value="GBP">GBP (UK)</option>
+                                    <option value="HKD">HKD (Hong Kong)</option>
+                                    <option value="SGD">SGD (Singapore)</option>
+                                    <option value="TWD">TWD (Taiwan)</option>
+                                    <option value="THB">THB (Thailand)</option>
+                                </select>
+                                <button 
+                                    onClick={fetchRate}
+                                    disabled={isFetchingRate}
+                                    className="text-blue-600 hover:text-blue-800 p-2 rounded-full hover:bg-blue-100 transition disabled:opacity-50"
+                                    title="Fetch Real-time Rate"
+                                >
+                                    <Icons.Refresh className={`w-5 h-5 ${isFetchingRate ? 'animate-spin' : ''}`} />
+                                </button>
                             </div>
+                            
                             <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-blue-200 shadow-sm">
-                                <span className="text-sm font-medium text-gray-500">Rate:</span>
+                                <span className="text-sm font-medium text-gray-500">Rate (to THB):</span>
                                 <input 
                                 type="number" 
                                 value={currencyRate}
                                 onChange={(e) => setCurrencyRate(parseFloat(e.target.value) || 1)}
-                                className="w-20 text-right font-bold text-gray-800 outline-none border-b border-dashed border-gray-300 focus:border-blue-500"
+                                className="w-24 text-right font-bold text-gray-800 outline-none border-b border-dashed border-gray-300 focus:border-blue-500"
                                 placeholder="1.0"
                                 />
                             </div>
@@ -249,62 +345,68 @@
                         {/* Add Item Form */}
                         <div className="p-6 border-b border-gray-100">
                             <form onSubmit={handleAddItem} className="space-y-4">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-xs font-bold text-gray-500 mb-1 uppercase">Item Name</label>
-                                    <input
-                                    type="text"
-                                    placeholder="e.g. Train Ticket"
-                                    value={newItemName}
-                                    onChange={(e) => setNewItemName(e.target.value)}
-                                    className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 outline-none"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-bold text-gray-500 mb-1 uppercase">Amount (Foreign)</label>
-                                    <input
-                                    type="number"
-                                    placeholder="0.00"
-                                    value={newItemAmount}
-                                    onChange={(e) => setNewItemAmount(e.target.value)}
-                                    className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 outline-none"
-                                    />
-                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div className="md:col-span-1">
+                                        <label className="block text-xs font-bold text-gray-500 mb-1 uppercase">Date</label>
+                                        <input
+                                            type="date"
+                                            value={newItemDate}
+                                            onChange={(e) => setNewItemDate(e.target.value)}
+                                            className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 outline-none"
+                                        />
+                                    </div>
+                                    <div className="md:col-span-1">
+                                        <label className="block text-xs font-bold text-gray-500 mb-1 uppercase">Item Name</label>
+                                        <input
+                                        type="text"
+                                        placeholder="e.g. Train Ticket"
+                                        value={newItemName}
+                                        onChange={(e) => setNewItemName(e.target.value)}
+                                        className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 outline-none"
+                                        />
+                                    </div>
+                                    <div className="md:col-span-1">
+                                        <label className="block text-xs font-bold text-gray-500 mb-1 uppercase">Amount ({baseCurrency})</label>
+                                        <input
+                                        type="number"
+                                        placeholder="0.00"
+                                        value={newItemAmount}
+                                        onChange={(e) => setNewItemAmount(e.target.value)}
+                                        className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 outline-none"
+                                        />
+                                    </div>
                                 </div>
 
-                                {/* Who is this for? */}
+                                {/* Multi-select Assignee */}
                                 <div>
-                                <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Who is this for?</label>
-                                <div className="flex flex-wrap gap-2">
-                                    <button
-                                    type="button"
-                                    onClick={() => setAssignee('all')}
-                                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 border ${
-                                        assignee === 'all' 
-                                        ? 'bg-blue-600 text-white border-blue-600 shadow-md transform scale-105' 
-                                        : 'bg-white text-gray-600 border-gray-200 hover:border-blue-300'
-                                    }`}
-                                    >
-                                    <Icons.Users className="w-4 h-4" /> Shared (All)
-                                    </button>
-                                    
-                                    {people.map(p => (
-                                    <button
-                                        key={p.id}
-                                        type="button"
-                                        onClick={() => setAssignee(p.id)}
-                                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 border ${
-                                        assignee === p.id 
-                                            ? p.isMe 
-                                            ? 'bg-emerald-600 text-white border-emerald-600 shadow-md transform scale-105'
-                                            : 'bg-indigo-600 text-white border-indigo-600 shadow-md transform scale-105'
-                                            : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
-                                        }`}
-                                    >
-                                        <Icons.User className="w-4 h-4" /> {p.name}
-                                    </button>
-                                    ))}
-                                </div>
+                                    <div className="flex justify-between items-end mb-2">
+                                        <label className="block text-xs font-bold text-gray-500 uppercase">Split Between</label>
+                                        <button type="button" onClick={selectAllAssignees} className="text-[10px] text-blue-500 hover:text-blue-700 underline">Select All</button>
+                                    </div>
+                                    <div className="flex flex-wrap gap-2">
+                                        {people.map(p => {
+                                            const isSelected = selectedAssignees.includes(p.id);
+                                            return (
+                                                <label key={p.id} className="cursor-pointer relative">
+                                                    <input 
+                                                        type="checkbox" 
+                                                        className="person-checkbox sr-only"
+                                                        checked={isSelected}
+                                                        onChange={() => toggleAssignee(p.id)}
+                                                    />
+                                                    <div className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 border 
+                                                        ${isSelected 
+                                                            ? '' 
+                                                            : 'bg-white text-gray-500 border-gray-200 hover:border-gray-300'}`}
+                                                    >
+                                                        <Icons.Users className="w-3 h-3" /> 
+                                                        {p.name}
+                                                        <span className="check-icon hidden text-blue-600"><Icons.Check className="w-3 h-3"/></span>
+                                                    </div>
+                                                </label>
+                                            )
+                                        })}
+                                    </div>
                                 </div>
 
                                 <button
@@ -318,30 +420,31 @@
                         </div>
 
                         {/* Item List */}
-                        <div className="bg-gray-50 max-h-60 overflow-y-auto p-4 space-y-2">
+                        <div className="bg-gray-50 max-h-80 overflow-y-auto p-4 space-y-2">
                             {items.length === 0 && <div className="text-center py-8 text-gray-400">No items yet</div>}
-                            {items.map((item) => (
+                            
+                            {/* Sort by date desc (newest first) */}
+                            {[...items].sort((a,b) => new Date(b.date) - new Date(a.date)).map((item) => (
                                 <div key={item.id} className="bg-white p-3 rounded-lg border border-gray-100 flex items-center justify-between group hover:shadow-md transition">
-                                <div className="flex items-center gap-3">
-                                    <div className={`w-2 h-10 rounded-full ${
-                                    item.type === 'shared' ? 'bg-blue-400' : 
-                                    item.assignedTo === 'me' ? 'bg-emerald-400' : 'bg-indigo-400'
+                                <div className="flex items-center gap-3 overflow-hidden">
+                                    <div className={`shrink-0 w-2 h-10 rounded-full ${
+                                        item.assignedTo.length === people.length ? 'bg-blue-400' : 
+                                        item.assignedTo.length === 1 && item.assignedTo[0] === 'me' ? 'bg-emerald-400' : 'bg-indigo-400'
                                     }`}></div>
-                                    <div>
-                                    <h3 className="font-medium text-gray-800">{item.name}</h3>
-                                    <p className="text-xs text-gray-500 flex items-center gap-1">
-                                        {item.type === 'shared' 
-                                        ? `Shared (${people.length} ppl)` 
-                                        : `Personal: ${getPersonName(item.assignedTo)}`}
-                                    </p>
+                                    <div className="min-w-0">
+                                        <h3 className="font-medium text-gray-800 truncate">{item.name}</h3>
+                                        <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500">
+                                            <span className="flex items-center gap-1 bg-gray-100 px-1.5 rounded"><Icons.Calendar className="w-3 h-3"/> {formatDate(item.date)}</span>
+                                            <span className="truncate">{getAssigneeText(item.assignedTo)}</span>
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-3 shrink-0">
                                     <div className="text-right">
                                     <span className="block font-mono font-semibold text-gray-700">
                                         {item.amount.toLocaleString()} 
                                     </span>
-                                    <span className="text-[10px] text-gray-400">Foreign</span>
+                                    <span className="text-[10px] text-gray-400">{baseCurrency}</span>
                                     </div>
                                     <button onClick={() => handleDeleteItem(item.id)} className="text-gray-300 hover:text-red-500 p-1">
                                     <Icons.Trash2 className="w-4 h-4" />
@@ -357,19 +460,19 @@
                                 <div>
                                 <p className="text-gray-400 text-xs uppercase">Total Trip Cost (Paid by Me)</p>
                                 <p className="text-2xl font-bold text-white">
-                                    {(items.reduce((sum, i) => sum + i.amount, 0) * currencyRate).toLocaleString(undefined, {maximumFractionDigits:0})} <span className="text-sm font-normal text-gray-500">THB</span>
+                                    {(totalTripForeign * currencyRate).toLocaleString(undefined, {maximumFractionDigits:0})} <span className="text-sm font-normal text-gray-500">THB</span>
                                 </p>
                                 </div>
                                 <div className="text-right">
                                 <p className="text-gray-400 text-xs uppercase">Shared Pool</p>
                                 <p className="text-lg font-medium text-blue-300">
-                                    {totalSharedTHB.toLocaleString(undefined, {maximumFractionDigits:0})} THB
+                                    {(totalSharedForeign * currencyRate).toLocaleString(undefined, {maximumFractionDigits:0})} THB
                                 </p>
                                 </div>
                             </div>
 
                             <h3 className="text-sm font-bold text-gray-300 mb-3 uppercase tracking-wider">Who owes me?</h3>
-                            <div className="grid gap-3">
+                            <div className="grid gap-3 mb-6">
                                 {people.filter(p => !p.isMe).map(person => {
                                 const debt = calculatePersonDebt(person.id);
                                 return (
@@ -389,11 +492,20 @@
                                 <div className="text-center text-gray-500 text-sm py-2">Add people to calculate debts</div>
                                 )}
                             </div>
+
+                             {/* MOVED BUTTON HERE */}
+                             <button 
+                                onClick={() => setShowSlip(true)}
+                                className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition shadow-lg shadow-blue-900/50"
+                            >
+                                <Icons.Receipt className="w-5 h-5" />
+                                Generate & Save Slip
+                            </button>
                         </div>
                     </div>
                     
                     <div className="text-center mt-6 text-gray-400 text-sm">
-                        <p>Trip Splitter App</p>
+                        <p>Universal Trip Splitter</p>
                     </div>
 
                     {/* SLIP MODAL */}
@@ -410,7 +522,7 @@
                                 <h2 className="text-xl font-bold text-gray-900 uppercase tracking-wide">Expense Summary</h2>
                                 <p className="text-sm text-gray-500 mt-1">{tripName}</p>
                                 <div className="flex justify-center items-center gap-2 mt-2">
-                                    <span className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600">Rate: {currencyRate}</span>
+                                    <span className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600">Rate: {currencyRate} THB/{baseCurrency}</span>
                                     <span className="text-xs text-gray-400">{new Date().toLocaleDateString('en-GB')}</span>
                                 </div>
                             </div>
@@ -434,22 +546,22 @@
                             <div className="grid grid-cols-2 gap-4 text-center text-xs text-gray-500 border-t border-gray-100 pt-4">
                                 <div>
                                 <span className="block mb-1">Total Trip Cost</span>
-                                <span className="font-mono font-medium text-gray-800">{(items.reduce((s,i)=>s+i.amount,0)*currencyRate).toLocaleString()} THB</span>
+                                <span className="font-mono font-medium text-gray-800">{(totalTripForeign * currencyRate).toLocaleString()} THB</span>
                                 </div>
                                 <div>
-                                <span className="block mb-1">Shared per Person</span>
-                                <span className="font-mono font-medium text-blue-600">{(sharedPerPersonForeign*currencyRate).toLocaleString()} THB</span>
+                                <span className="block mb-1">Shared Pool</span>
+                                <span className="font-mono font-medium text-blue-600">{(totalSharedForeign * currencyRate).toLocaleString()} THB</span>
                                 </div>
                             </div>
                             
                             <div className="text-center mt-6">
-                                <p className="text-[10px] text-gray-400 uppercase tracking-widest">Calculated by Trip Splitter</p>
+                                <p className="text-[10px] text-gray-400 uppercase tracking-widest">By ONOURWAY</p>
                             </div>
                             </div>
 
                             <div className="p-4 bg-gray-50 border-t border-gray-100 flex gap-3">
                             <button onClick={handleDownloadImage} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg flex items-center justify-center gap-2 transition">
-                                <Icons.Download className="w-4 h-4" /> Save Slip
+                                <Icons.Download className="w-4 h-4" /> Save Image
                             </button>
                             </div>
                         </div>
