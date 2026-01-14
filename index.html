@@ -1,1114 +1,377 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Verve Juice - Fresh & Healthy</title>
-
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <!-- Google Fonts -->
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap');
-
-    :root {
-      --primary-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      --accent-gradient: linear-gradient(135deg, #34d399 0%, #10b981 100%);
-      --glass-bg: rgba(255, 255, 255, 0.9);
-      --glass-border: rgba(255, 255, 255, 0.8);
-      --shadow-premium: 0 20px 40px -15px rgba(16, 185, 129, 0.15);
-      --shadow-card: 0 10px 30px -10px rgba(0,0,0,0.05);
-    }
-
-    body {
-      font-family: 'Noto Sans Thai', sans-serif;
-      background-color: #f0fdf4;
-      background: 
-        radial-gradient(at 0% 0%, hsla(152,100%,96%,1) 0, transparent 50%), 
-        radial-gradient(at 100% 0%, hsla(140,100%,94%,1) 0, transparent 50%), 
-        radial-gradient(at 50% 100%, hsla(36,100%,96%,1) 0, transparent 50%);
-      background-attachment: fixed;
-      min-height: 100vh;
-      -webkit-tap-highlight-color: transparent;
-      overflow-x: hidden;
-      color: #334155;
-    }
-
-    .blob {
-      position: fixed;
-      filter: blur(60px);
-      z-index: -1;
-      opacity: 0.5;
-      animation: float-blob 25s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .blob-1 { top: -10%; left: -10%; width: 60vw; height: 60vw; background: #bbf7d0; border-radius: 40% 60% 70% 30%; animation-delay: 0s; }
-    .blob-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: #fef08a; border-radius: 60% 40% 30% 70%; animation-delay: -5s; }
-    
-    @keyframes float-blob {
-      0% { transform: translate(0, 0) rotate(0deg); }
-      100% { transform: translate(30px, 50px) rotate(10deg); }
-    }
-
-    .cute-font { font-family: 'Kanit', sans-serif; }
-
-    .glass-panel {
-      background: var(--glass-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--shadow-premium);
-    }
-    
-    .glass-dock {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      border-top: 1px solid rgba(255, 255, 255, 0.8);
-      box-shadow: 0 -15px 40px rgba(0,0,0,0.08);
-    }
-
-    .btn-clay {
-      background: var(--primary-gradient);
-      color: white;
-      border: none;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3), inset 0 1px 0 rgba(255,255,255,0.3);
-    }
-    .btn-clay:active {
-      transform: scale(0.96);
-      box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
-    }
-    .btn-clay:hover {
-      filter: brightness(1.05);
-      transform: translateY(-2px);
-    }
-
-    .menu-item-modern {
-      background: white;
-      border-radius: 28px;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.8);
-      box-shadow: var(--shadow-card);
-    }
-    .menu-item-modern:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-      border-color: #6ee7b7;
-    }
-
-    .menu-img-wrapper {
-      position: relative;
-      overflow: hidden;
-    }
-    .menu-img-wrapper img {
-      transition: transform 0.7s ease;
-    }
-    .menu-item-modern:hover .menu-img-wrapper img {
-      transform: scale(1.05);
-    }
-
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-    
-    .fade-in-up { animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(30px); }
-    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
-    
-    .input-modern {
-      background: #f8fafc;
-      border: 2px solid #f1f5f9;
-      transition: all 0.3s ease;
-    }
-    .input-modern:focus {
-      background: white;
-      border-color: #34d399;
-      box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.15);
-      outline: none;
-    }
-
-    @keyframes shine {
-        0% { transform: translateX(-100%) rotate(45deg); }
-        100% { transform: translateX(100%) rotate(45deg); }
-    }
-    .badge-shine {
-        position: relative;
-        overflow: hidden;
-    }
-    .badge-shine::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
-        animation: shine 2.5s infinite;
-    }
-
-    .text-gradient {
-        background: var(--primary-gradient);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-  </style>
-</head>
-<body class="pb-32 sm:pb-16 text-slate-700">
-
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
-
-  <div class="max-w-4xl mx-auto p-4 sm:p-8">
-    
-    <!-- Header -->
-    <header class="text-center mb-10 fade-in-up" style="animation-delay: 0.1s;">
-      <div class="relative inline-block mb-6 group cursor-pointer perspective-1000">
-        <div class="absolute inset-0 bg-gradient-to-tr from-emerald-400 to-yellow-300 rounded-full blur-3xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
-        <!-- MODIFIED: Smaller logo on mobile (w-44 instead of w-52) -->
-        <img src="https://github.com/kornkawes/VerveImage/blob/main/logo2.png?raw=true" 
-             alt="Verve Juice" 
-             class="relative w-44 sm:w-64 h-auto drop-shadow-xl transform transition-transform group-hover:scale-105 duration-500 hover:rotate-1">
-      </div>
-      
-      <!-- Social Pills -->
-      <div class="flex justify-center flex-wrap gap-3 mt-2">
-        <a href="https://www.tiktok.com/@vervejuice.th" target="_blank" class="flex items-center gap-2 px-4 py-2.5 bg-black text-white rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all text-xs font-bold no-underline ring-2 ring-black/10">
-            <i class="fa-brands fa-tiktok text-sm"></i> VerveJuice
-        </a>
-        <a href="https://www.instagram.com/vervejuice.th" target="_blank" class="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-tr from-purple-500 to-pink-500 text-white rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all text-xs font-bold no-underline ring-2 ring-pink-500/20">
-            <i class="fa-brands fa-instagram text-sm"></i> VerveJuice
-        </a>
-        <a href="https://lin.ee/Z5hDNAQ" target="_blank" class="flex items-center gap-2 px-5 py-2.5 bg-[#06c755] text-white rounded-full shadow-lg shadow-green-200 hover:shadow-green-300 hover:-translate-y-1 transition-all text-xs font-bold no-underline ring-2 ring-green-500/20">
-            <i class="fa-brands fa-line text-lg"></i> สอบถาม/ติดตามโปรโมชั่น
-        </a>
-      </div>
-    </header>
-
-    <!-- CONTENT -->
-    <div id="main-content" class="relative z-10 transition-all duration-300">
-      
-      <!-- Announcement -->
-      <div class="mb-10 glass-panel rounded-[32px] p-1 fade-in-up relative overflow-hidden group" style="animation-delay: 0.2s;">
-        <div class="bg-white/50 p-6 sm:p-8 rounded-[28px] relative z-10">
-            <div class="absolute -right-6 -top-6 bg-orange-200 w-32 h-32 rounded-full opacity-20 blur-2xl group-hover:opacity-30 transition-opacity"></div>
-            <div class="absolute -left-6 -bottom-6 bg-yellow-200 w-24 h-24 rounded-full opacity-20 blur-2xl group-hover:opacity-30 transition-opacity"></div>
-
-            <div class="space-y-6">
-                <div class="text-center">
-                    <div class="inline-flex items-center gap-2 bg-white px-5 py-2 rounded-full mb-4 shadow-sm border border-orange-100">
-                        <i class="fas fa-map-marker-alt text-orange-500 animate-bounce"></i>
-                        <span class="font-bold text-orange-800 text-xs uppercase tracking-widest">พื้นที่จัดส่งหลัก</span>
-                    </div>
-                    <div class="flex flex-col sm:flex-row gap-3 justify-center items-stretch sm:items-center text-sm font-medium text-slate-700">
-                        <div class="bg-white/70 px-4 py-2 rounded-2xl border border-white shadow-sm flex items-center justify-center gap-2 hover:scale-105 transition-transform"><span class="text-xl">🏢</span> สาทร / Park Silom</div>
-                        <div class="bg-white/70 px-4 py-2 rounded-2xl border border-white shadow-sm flex items-center justify-center gap-2 hover:scale-105 transition-transform"><span class="text-xl">🏛️</span> พระนคร / ศาลาว่าการ กทม. 1</div>
-                        <div class="bg-white/70 px-4 py-2 rounded-2xl border border-white shadow-sm flex items-center justify-center gap-2 hover:scale-105 transition-transform"><span class="text-xl">🏡</span> ไทรน้อย / หมู่บ้านชวนชม</div>
-                    </div>
-                    <p class="text-[11px] text-slate-500 mt-3 flex items-center justify-center gap-1 font-medium opacity-80">
-                        <i class="fas fa-info-circle text-emerald-500"></i> นอกพื้นที่ทักไลน์สอบถามได้เลยครับ
-                    </p>
-                </div>
-
-                <div class="h-px bg-gradient-to-r from-transparent via-orange-200 to-transparent w-full opacity-60"></div>
-
-                <div class="flex items-start gap-4 bg-orange-50/50 p-5 rounded-2xl border border-orange-100/50">
-                     <div class="bg-white w-12 h-12 rounded-2xl text-orange-500 flex items-center justify-center flex-shrink-0 shadow-md shadow-orange-100">
-                         <i class="fas fa-bullhorn text-lg"></i>
-                     </div>
-                     <div>
-                         <p class="font-bold text-slate-800 text-sm mb-1">ประกาศจากร้าน</p>
-                         <p class="text-xs text-slate-600 leading-relaxed">
-                             ตอนนี้ Verve Juice มี <b>Line Official Account</b> แล้วน้า! 
-                             แอดเพื่อนเพื่อติดตามข่าวสารและโปรโมชั่นใหม่ๆได้เลยครับ 🎉
-                         </p>
-                     </div>
-                </div>
-            </div>
-        </div>
-      </div>
-
-      <!-- Menu Section -->
-      <div id="order-form-section" class="fade-in-up" style="animation-delay: 0.3s;">
-        <div class="flex items-center justify-between mb-8 px-2">
-           <h2 class="text-2xl sm:text-3xl font-bold cute-font text-slate-800 flex items-center gap-3">
-             <span class="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-100 to-teal-50 flex items-center justify-center text-emerald-600 shadow-sm border border-emerald-100">
-                 <i class="fas fa-leaf text-lg"></i>
-             </span>
-             <span class="text-gradient">เมนู</span>
-           </h2>
-        </div>
-        
-        <div id="menu-items" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"></div>
-      </div>
-
-      <!-- Payment Section -->
-      <div id="payment-section" class="hidden fade-in-up">
-        <!-- Header -->
-        <div id="payment-header" class="flex items-center gap-4 mb-8 pt-4">
-            <button id="back-to-menu-btn" class="w-12 h-12 rounded-full bg-white shadow-md border border-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-50 hover:text-emerald-600 transition-all active:scale-95">
-                <i class="fas fa-arrow-left"></i>
-            </button>
-            <h2 class="text-2xl sm:text-3xl font-bold cute-font text-slate-800">ยืนยันคำสั่งซื้อ</h2>
-        </div>
-
-        <!-- LAYOUT ADJUSTMENT: lg:grid-cols-2 (50/50 split) to widen right column for button space -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12">
-            <!-- Left Col (Form) -->
-            <div class="space-y-8">
-                <div class="bg-white rounded-[32px] p-6 sm:p-8 shadow-sm border border-slate-100">
-                    <h3 class="font-bold text-slate-800 mb-6 flex items-center gap-3 text-lg">
-                        <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-sm"><i class="fas fa-user"></i></div>
-                        ข้อมูลผู้รับ
-                    </h3>
-                    <div class="space-y-5">
-                        <input id="customerName" type="text" placeholder="ชื่อ-นามสกุล" class="w-full px-5 py-4 rounded-2xl input-modern text-sm" />
-                        <input id="customerPhone" type="tel" placeholder="เบอร์โทรศัพท์ (10 หลัก)" class="w-full px-5 py-4 rounded-2xl input-modern text-sm" />
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-[32px] p-6 sm:p-8 shadow-sm border border-slate-100">
-                     <h3 class="font-bold text-slate-800 mb-6 flex items-center gap-3 text-lg">
-                         <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-sm"><i class="fas fa-truck"></i></div>
-                         การจัดส่ง
-                     </h3>
-                     <div class="relative">
-                        <i class="fas fa-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-xs"></i>
-                        <select id="deliveryLocation" class="w-full px-5 py-4 rounded-2xl input-modern text-sm mb-6 cursor-pointer appearance-none">
-                            <option value="">-- เลือกจุดรับสินค้า --</option>
-                            <option value="sathorn">สาทร / Park Silom</option>
-                            <option value="PhraNakhon">พระนคร / ศาลาว่าการ กทม.</option>
-                            <option value="sainoi">ไทรน้อย / หมู่บ้านชวนชม</option>
-                        </select>
-                     </div>
-                      
-                      <div id="delivery-dates-container" class="space-y-2 min-h-[60px] flex flex-col justify-center bg-slate-50 p-4 rounded-2xl border border-slate-100 mb-3">
-                          <p class="text-center text-slate-400 text-xs font-medium">กรุณาเลือกสถานที่จัดส่งก่อน</p>
-                      </div>
-                      <p id="delivery-warning" class="text-[11px] text-orange-500 mt-2 hidden pl-1 font-medium"><i class="fas fa-exclamation-circle"></i> ทางร้านขอสงวนสิทธิ์เป็นฝ่ายเลือกวันในการจัดส่ง</p>
-                      
-                      <div class="mt-6 flex justify-end">
-                         <a href="https://lin.ee/Z5hDNAQ" target="_blank" 
-                            class="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-emerald-200 rounded-full shadow-sm text-xs font-bold text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800 transition-all no-underline transform hover:scale-105 group">
-                            <i class="fa-brands fa-line text-lg text-[#06c755] group-hover:scale-110 transition-transform"></i>
-                            <span>อยู่นอกพื้นที่? ทักไลน์สอบถาม</span>
-                         </a>
-                    </div>
-                    
-                    <textarea id="customerNote" placeholder="หมายเหตุเพิ่มเติม (ถ้ามี)" class="w-full px-5 py-4 rounded-2xl input-modern text-sm h-28 resize-none mt-5"></textarea>
-                </div>
-            </div>
-
-            <!-- Right Col (Summary & Pay) - Expanded Width -->
-            <div class="space-y-8">
-                <!-- Summary -->
-                <div class="bg-white rounded-[32px] p-6 sm:p-8 shadow-sm border border-slate-100 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-emerald-100/50 to-transparent rounded-bl-full pointer-events-none"></div>
-                    <h3 class="font-bold text-slate-800 mb-6 text-lg">สรุปยอด</h3>
-                    <div id="order-summary" class="text-sm text-slate-600 space-y-3 mb-6 max-h-60 overflow-y-auto pr-2"></div>
-                    
-                    <div class="flex gap-3 mb-2">
-                        <input id="discountCode" type="text" placeholder="CODE" class="flex-1 px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm text-center uppercase tracking-widest focus:outline-none focus:border-emerald-500 transition-colors font-medium text-slate-700">
-                        <button id="apply-discount-btn" class="px-6 py-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold hover:bg-slate-700 shadow-lg shadow-slate-200 whitespace-nowrap">ใช้โค้ด</button>
-                    </div>
-                    <p id="discount-info" class="text-xs text-center h-4 mb-2"></p>
-
-                    <div class="border-t border-dashed border-slate-200 pt-5 mt-2 space-y-3">
-                         <div class="flex justify-between text-slate-500 text-xs font-medium"><span>รวมค่าสินค้า</span><span id="subtotal-price">฿0</span></div>
-                         <div id="discount-display-section" class="flex justify-between text-red-500 text-xs hidden font-medium">
-                            <span>ส่วนลด <span id="discount-code-display" class="bg-red-50 px-1.5 py-0.5 rounded text-[10px] uppercase border border-red-100"></span></span>
-                            <span id="discount-amount">-฿0</span>
-                        </div>
-                        <div class="flex justify-between items-end pt-2">
-                            <span class="font-bold text-slate-800 text-lg">ยอดสุทธิ</span>
-                            <span id="total-price" class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500 cute-font">฿0</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- QR -->
-                <div class="bg-white rounded-[32px] p-6 sm:p-8 shadow-sm border border-slate-100 text-center">
-                    <p class="text-xs text-slate-400 mb-4 font-bold uppercase tracking-widest">สแกนจ่ายเงิน</p>
-                    <div class="bg-slate-50 p-4 rounded-3xl inline-block mb-4 border border-slate-100 shadow-inner">
-                         <img id="qrCodeImage" src="https://github.com/kornkawes/Image/blob/main/unnamed%20(1).jpg?raw=true" class="w-44 h-44 object-contain rounded-2xl mix-blend-multiply" 
-                         onerror="this.onerror=null;this.src='https://placehold.co/400x400/eeeeee/333333?text=QR+Error';">
-                    </div>
-                    
-                    <div class="bg-emerald-50/50 rounded-2xl p-4 border border-emerald-100 cursor-pointer hover:bg-emerald-100 transition-colors group relative overflow-hidden" id="copy-account-btn">
-                        <div class="absolute inset-0 bg-emerald-200 opacity-0 group-hover:opacity-10 transition-opacity"></div>
-                        <div class="flex justify-center items-center gap-2 mb-2">
-                            <i class="fas fa-university text-emerald-600 text-lg"></i>
-                            <span class="text-xs font-bold text-slate-600">ธนาคารกสิกรไทย</span>
-                        </div>
-                        <p class="text-sm font-bold text-slate-800 mb-1">นาย กรกวี สายเพชร</p>
-                        <p class="font-mono text-xl font-bold text-slate-800 tracking-wider" id="bank-account-number">014-1-08305-8</p>
-                        <p class="text-[10px] text-emerald-600 mt-2 opacity-70 group-hover:opacity-100 transition-opacity font-medium"><i class="fas fa-copy mr-1"></i> แตะเพื่อคัดลอกเลขบัญชี</p>
-                    </div>
-                </div>
-
-                <!-- Slip -->
-                <div class="space-y-4">
-                    <label class="block w-full p-6 border-2 border-dashed border-slate-300 rounded-[28px] text-center cursor-pointer hover:border-emerald-400 hover:bg-emerald-50/30 transition-all group relative overflow-hidden bg-white/50" id="slip-drop-zone">
-                        <input id="slipUpload" type="file" accept="image/*" class="hidden" />
-                        <div class="relative z-10 transition-transform group-hover:scale-105 duration-300">
-                             <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-emerald-100 transition-colors">
-                                 <i class="fas fa-image text-xl text-slate-400 group-hover:text-emerald-500"></i>
-                             </div>
-                             <p class="text-sm font-bold text-slate-600 group-hover:text-emerald-700">อัปโหลดสลิป</p>
-                             <p class="text-xs text-slate-400 mt-1">คลิกเพื่อเลือกรูปภาพ</p>
-                        </div>
-                    </label>
-                    
-                    <div id="slip-preview-container" class="hidden relative w-full group">
-                        <button onclick="clearSlip()" class="absolute top-2 right-2 w-8 h-8 bg-white/90 text-red-500 rounded-full flex items-center justify-center text-sm z-10 shadow-lg backdrop-blur-sm hover:bg-red-500 hover:text-white transition-all transform hover:scale-110 opacity-0 group-hover:opacity-100">&times;</button>
-                        <img id="slip-preview" class="w-full h-auto rounded-2xl shadow-md block border border-slate-100">
-                    </div>
-
-                    <button id="upload-slip-btn" class="w-full btn-clay py-4 rounded-2xl font-bold text-lg shadow-xl shadow-emerald-200/50 flex items-center justify-center gap-3 group overflow-hidden relative">
-                        <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-                        <span id="upload-slip-text" class="relative z-10">ยืนยันการสั่งซื้อ</span>
-                        <div id="upload-slip-spinner" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin hidden relative z-10"></div>
-                        <i class="fas fa-check-circle text-white/80 relative z-10 group-hover:scale-110 transition-transform"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="h-32"></div>
-      </div>
-
-      <!-- Confirmation Section -->
-      <div id="confirmation-section" class="hidden fade-in-up text-center pt-16 px-4">
-          <div class="inline-block relative mb-8">
-              <div class="absolute inset-0 bg-emerald-400 blur-3xl opacity-20 rounded-full animate-pulse"></div>
-              <div class="w-28 h-28 bg-gradient-to-tr from-emerald-400 to-teal-500 rounded-full flex items-center justify-center relative shadow-2xl shadow-emerald-200 ring-4 ring-white">
-                 <i class="fas fa-check text-5xl text-white drop-shadow-md"></i>
-              </div>
-          </div>
-          <h1 class="text-4xl font-bold cute-font text-slate-800 mb-3">ขอบคุณสำหรับคำสั่งซื้อ!</h1>
-          <p class="text-slate-500 mb-10 max-w-md mx-auto leading-relaxed">หลังจากตรวจสอบสลิปแล้ว<br>จะเริ่มจัดเตรียมคำสั่งซื้อให้ทันทีครับ</p>
-          
-          <div id="final-order-summary" class="bg-white p-8 rounded-[32px] shadow-xl shadow-emerald-50 border border-emerald-100/50 max-w-md mx-auto text-left mb-8 relative overflow-hidden">
-              <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-400 to-yellow-400"></div>
-          </div>
-
-          <button onclick="window.location.reload()" class="bg-slate-800 text-white px-10 py-4 rounded-2xl font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all ring-4 ring-slate-100">สั่งสินค้าเพิ่ม</button>
-          <p class="text-xs text-red-400 mt-6 opacity-60 font-medium">*กรุณาบันทึกภาพหน้าจอนี้ไว้เป็นหลักฐานคำสั่งซื้อ</p>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- FLOATING CART DOCK (COMPACT ON MOBILE) -->
-  <div id="floating-cart-container" class="fixed bottom-0 left-0 right-0 z-40 pointer-events-none translate-y-full transition-transform duration-300">
-     <div class="max-w-xl mx-auto px-4 pb-4 sm:pb-6">
-         <div id="open-cart-btn" class="pointer-events-auto glass-dock rounded-2xl sm:rounded-[24px] p-2 pr-3 sm:p-3 sm:pr-4 flex items-center justify-between cursor-pointer hover:bg-white transition-all group ring-1 ring-white/50 shadow-2xl shadow-emerald-900/10">
-             <div class="flex items-center gap-3 sm:gap-4">
-                 <div class="relative">
-                     <div class="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-slate-900 flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform duration-300">
-                         <i class="fas fa-shopping-bag text-sm sm:text-lg"></i>
-                     </div>
-                     <span id="cart-count-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center rounded-full border-2 border-white shadow-md transform scale-0 transition-transform duration-300">0</span>
-                 </div>
-                 <div>
-                     <p class="text-[9px] sm:text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">ตะกร้าของคุณ</p>
-                     <p id="dock-total-price" class="text-base sm:text-xl font-bold text-slate-800 leading-none tracking-tight">฿0</p>
-                 </div>
-             </div>
-             <div class="flex items-center gap-2 bg-emerald-50/80 px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl text-emerald-700 font-bold text-[10px] sm:text-xs group-hover:bg-emerald-100 transition-colors">
-                 <span>ดูรายการ</span> <i class="fas fa-chevron-up text-[8px] sm:text-[10px]"></i>
-             </div>
-         </div>
-     </div>
-  </div>
-
-  <!-- MODAL: Refined Design & Increased Height & POPUP on Mobile -->
-  <!-- MODIFIED: "items-center" instead of "items-end" for popup effect on mobile -->
-  <div id="item-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
-     <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity opacity-0 duration-300" id="modal-backdrop"></div>
-     <!-- MODIFIED: Width 90% and rounded on all sides for mobile popup feel -->
-     <div class="relative bg-white w-[95%] sm:w-[420px] rounded-[32px] shadow-2xl transform scale-95 opacity-0 transition-all duration-300 flex flex-col max-h-[90vh] min-h-[60vh]" id="modal-panel">
-         
-         <div class="overflow-y-auto p-6 pb-10 flex-1 scrollbar-hide">
-             <button onclick="closeModal()" class="absolute top-4 right-4 w-9 h-9 bg-slate-100/80 rounded-full text-slate-500 flex items-center justify-center hover:bg-slate-200 transition-colors z-20 backdrop-blur-md">&times;</button>
-             <div id="modal-content-body"></div>
-         </div>
-     </div>
-  </div>
-
-  <!-- SIDEBAR: Refined -->
-  <div id="cart-sidebar" class="fixed inset-0 z-[60] hidden flex justify-end">
-      <div class="absolute inset-0 bg-slate-900/20 backdrop-blur-sm transition-opacity opacity-0 duration-300" id="cart-backdrop" onclick="closeCart()"></div>
-      <div class="relative bg-white w-full sm:max-w-md h-full shadow-2xl transform translate-x-full transition-transform duration-500 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col" id="cart-panel">
-          <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-white/90 backdrop-blur-md sticky top-0 z-10">
-              <h2 class="text-2xl font-bold cute-font text-slate-800">ตะกร้าสินค้า</h2>
-              <button onclick="closeCart()" class="text-slate-400 hover:text-red-500 transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-50"><i class="fas fa-times text-xl"></i></button>
-          </div>
-          
-          <div id="cart-items-container" class="flex-1 overflow-y-auto p-5 space-y-4 bg-slate-50/50"></div>
-
-          <div class="p-6 bg-white border-t border-slate-100 safe-area-pb shadow-[0_-10px_40px_rgba(0,0,0,0.05)] relative z-20">
-              <div class="flex justify-between items-center mb-5">
-                  <span class="text-slate-500 font-medium">รวมทั้งหมด</span>
-                  <span id="cart-sidebar-total" class="text-3xl font-bold text-emerald-600 cute-font">฿0</span>
-              </div>
-              <button id="go-to-checkout" class="w-full btn-clay py-4 rounded-2xl font-bold text-lg shadow-xl shadow-emerald-200 flex justify-between px-8 items-center group">
-                  <span>ชำระเงิน</span>
-                  <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-              </button>
-          </div>
-      </div>
-  </div>
-
-<script>
-const getEl = id => document.getElementById(id);
-const formatMoney = num => `฿${num.toLocaleString()}`;
-
-const menuData = [
-    { id:'apple-kiss', name:'Apple Kiss', ingredients:'แอปเปิ้ลเขียว, ขิง, มะนาว', properties:'ช่วยป้องกันผิวจากแสงแดด, ลดจุดด่างดำ', imageUrl:'https://github.com/kornkawes/VerveImage/blob/main/apple%20kiss.jpg?raw=true', sizes: [{size:'250ml', price:89}, {size:'300ml', price:109}] },
-    { id:'blush-bloom', name:'Blush Bloom', ingredients:'มะเขือเทศ, สับปะรด, มะนาว', properties:'ช่วยผลัดเซลล์ผิวเก่าและลดริ้วรอย', imageUrl:'https://github.com/kornkawes/VerveImage/blob/main/blush%20bloom.jpg?raw=true', sizes: [{size:'250ml', price:89}, {size:'300ml', price:109}] },
-    { id:'Pure-guava', name:'Pure Guava', ingredients:'แอปเปิ้ลเขียว, ฝรั่ง, แตงกวาญี่ปุ่น, มะนาว', properties:'ล้างสารพิษ, รักษาอาการท้องผูก', imageUrl:'https://github.com/kornkawes/VerveImage/blob/main/lime%20guava.jpg?raw=true', sizes: [{size:'250ml', price:89}, {size:'300ml', price:109}] },
-    { id:'hearty-green', name:'Hearty Green', ingredients:'แอปเปิ้ล, สับปะรด, แตงกวาญี่ปุ่น', properties:'ลดคอเลสเตอรอลและต่อต้านมะเร็ง', imageUrl:'https://github.com/kornkawes/VerveImage/blob/main/hearty%20green.jpg?raw=true', sizes: [{size:'250ml', price:89}, {size:'300ml', price:109}] },
-    { id:'sweet-detox', name:'Sweet Detox', ingredients:'แอปเปิ้ล, แครอท, บีทรูท', properties:'ล้างสารพิษสำหรับคนควบคุมน้ำหนัก', imageUrl:'https://github.com/kornkawes/VerveImage/blob/main/sweet%20detox.jpg?raw=true', sizes: [{size:'250ml', price:89}, {size:'300ml', price:109}], isBestSeller: true },
-    { id:'beet-love', name:'Beet Love', ingredients:'แอปเปิ้ล, บีทรูท, มะนาว', properties:'ดูแลสุขภาพหัวใจและควบคุมความดันโลหิต', imageUrl:'https://github.com/kornkawes/VerveImage/blob/main/beet%20love.jpg?raw=true', sizes: [{size:'250ml', price:89}, {size:'300ml', price:109}] },
-    { id:'smart-sip', name:'Smart Sip', ingredients:'แอปเปิ้ล, เคล, สับปะรด', properties:'ช่วยบำรุงการทำงานของสมองและสายตา', imageUrl:'https://github.com/kornkawes/VerveImage/blob/main/smart%20sip.jpg?raw=true', sizes: [{size:'250ml', price:89}, {size:'300ml', price:109}], isBestSeller: true },
-    { id:'recharge-me', name:'Recharge Me', ingredients:'แอปเปิ้ล, ขิง, มะนาว', properties:'กระตุ้นร่างกายให้ฟื้นตัวจากการเมื่อยล้า', imageUrl:'https://github.com/kornkawes/VerveImage/blob/main/recharge%20me.jpg?raw=true', sizes: [{size:'250ml', price:89}, {size:'300ml', price:109}] },
-];
-
-const discountCodes = [
-    { code:"VJLINE10", type:"percent", value:10, expiryDate:"2025-12-31", minSpend:0, minItems:3, maxDiscount:40 },
-    { code:"SUCHATANDSOMPOP", type:"fixed", value:20, expiryDate:"2025-12-31", minSpend:0, minItems:3, maxDiscount:20 }
-];
-
-const deliveryConfig = {
-    sathorn: { label: 'สาทร / ตึก Park Silom', weekdays: [1, 2, 3] },
-    PhraNakhon: { label: 'พระนคร / ศาลาว่าการ กทม.', weekdays: [1, 2, 3, 4, 5] },
-    sainoi: { label: 'ไทรน้อย / หมู่บ้านชวนชม', weekdays: [1, 2, 3, 4, 5] }
-};
-
-const DELIVERY_WEEKS_AHEAD = 1;
-const n8nWebhookUrl = "https://n8n-verve-u61532.vm.elestio.app/webhook/3292a5c3-0f7f-424f-92f8-7dc42f51d763";
-
-let order = { items:{}, total:0, subtotal:0, discount:null, totalItems:0 };
-
-const menuContainer = getEl('menu-items');
-const cartBadge = getEl('cart-count-badge');
-const dockTotal = getEl('dock-total-price');
-const dockContainer = getEl('floating-cart-container');
-const deliveryDatesContainerEl = getEl('delivery-dates-container');
-const deliveryWarningEl = getEl('delivery-warning');
-
-document.addEventListener('DOMContentLoaded', () => {
-    renderMenu();
-    setupEventListeners();
-    updateTotal();
-});
-
-function renderMenu() {
-    menuContainer.innerHTML = menuData.map((item, index) => {
-        const minPrice = item.sizes[0].price;
-        const maxPrice = item.sizes[item.sizes.length-1].price;
-        const priceDisplay = minPrice === maxPrice ? `฿${minPrice}` : `฿${minPrice} - ฿${maxPrice}`;
-        const badge = item.isBestSeller ? `<div class="absolute top-4 right-4 badge-shine bg-gradient-to-r from-rose-500 to-pink-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-full z-10 shadow-lg flex items-center gap-1.5 tracking-wider"><i class="fas fa-crown text-yellow-300"></i> BEST SELLER</div>` : '';
-            
-        return `
-        <div class="menu-item-modern group cursor-pointer fade-in-up" style="animation-delay: ${index * 0.1}s" onclick="openProductModal('${item.id}')">
-            ${badge}
-            <!-- REVERTED: h-72 on all screens (original size) -->
-            <div class="menu-img-wrapper h-72 w-full bg-white relative rounded-t-[28px] overflow-hidden">
-                <img src="${item.imageUrl}" class="w-full h-full object-cover" loading="lazy">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <button class="absolute bottom-4 right-4 w-10 h-10 sm:w-12 sm:h-12 bg-white/95 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center text-emerald-600 hover:bg-emerald-500 hover:text-white transition-all transform hover:scale-110 active:scale-95 group-hover:translate-y-0 translate-y-2 opacity-90 group-hover:opacity-100">
-                    <i class="fas fa-plus text-lg"></i>
-                </button>
-            </div>
-            <div class="p-6">
-                <!-- MODIFIED: flex-col on Desktop (lg) to put price below name -->
-                <div class="flex justify-between items-start mb-2 lg:flex-col lg:items-start lg:gap-1">
-                    <h3 class="font-bold text-slate-800 text-xl group-hover:text-emerald-600 transition-colors cute-font tracking-wide">${item.name}</h3>
-                    <span class="font-bold text-emerald-700 bg-emerald-50/80 px-2.5 py-1 rounded-lg text-sm border border-emerald-100">${priceDisplay}</span>
-                </div>
-                <p class="text-xs text-slate-500 line-clamp-1 mb-3 font-medium"><i class="fas fa-star text-[10px] text-yellow-400 mr-1"></i> ${item.properties}</p>
-                <div class="flex flex-wrap gap-1">
-                    <span class="text-[10px] bg-slate-50 text-slate-500 px-2.5 py-1 rounded-md border border-slate-100 w-full truncate font-medium">
-                        <i class="fas fa-flask text-emerald-400 mr-1"></i> ${item.ingredients}
-                    </span>
-                </div>
-            </div>
-        </div>
-        `;
-    }).join('');
-}
-
-window.openProductModal = (id) => {
-    const item = menuData.find(i => i.id === id);
-    const modal = getEl('item-modal');
-    const backdrop = getEl('modal-backdrop');
-    const panel = getEl('modal-panel');
-    const body = getEl('modal-content-body');
-
-    body.innerHTML = `
-        <div class="flex flex-col items-center mb-8">
-            <div class="w-40 h-40 rounded-[24px] overflow-hidden shadow-xl shadow-emerald-100 mb-5 relative bg-white border-4 border-white">
-                 <img src="${item.imageUrl}" class="w-full h-full object-contain hover:scale-110 transition-transform duration-500">
-            </div>
-            <h2 class="text-3xl font-bold text-slate-800 cute-font mb-2">${item.name}</h2>
-            <p class="text-sm text-slate-500 text-center px-4 mb-3 font-medium leading-relaxed">${item.properties}</p>
-            <div class="text-xs text-emerald-700 bg-emerald-50 px-4 py-1.5 rounded-full border border-emerald-100 font-bold">
-                <i class="fas fa-flask mr-1"></i> ส่วนผสม: ${item.ingredients}
-            </div>
-        </div>
-
-        <div class="space-y-6">
-            <div>
-                <label class="block text-[10px] font-bold text-slate-400 mb-3 uppercase tracking-widest pl-1">เลือกขนาด</label>
-                <div class="grid grid-cols-2 gap-4">
-                    ${item.sizes.map((s, idx) => `
-                        <label class="cursor-pointer relative group">
-                            <input type="radio" name="modal-size" value="${s.size}" data-price="${s.price}" class="peer sr-only" ${idx===0?'checked':''}>
-                            <div class="p-4 rounded-2xl border-2 border-slate-100 bg-white text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50/50 peer-checked:text-emerald-700 transition-all shadow-sm hover:border-emerald-200">
-                                <div class="font-bold text-lg mb-0.5">${s.size}</div>
-                                <div class="text-sm opacity-70">฿${s.price}</div>
-                                <div class="absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] opacity-0 peer-checked:opacity-100 transition-opacity transform scale-0 peer-checked:scale-100"><i class="fas fa-check"></i></div>
-                            </div>
-                        </label>
-                    `).join('')}
-                </div>
-            </div>
-
-            <div>
-                 <label class="block text-[10px] font-bold text-slate-400 mb-3 uppercase tracking-widest pl-1">จำนวน</label>
-                 <div class="flex items-center justify-between bg-slate-50 rounded-2xl p-2 border border-slate-100">
-                     <button onclick="updateQty(-1)" class="w-12 h-12 bg-white rounded-xl shadow-sm text-slate-600 hover:text-red-500 active:scale-95 transition-transform border border-slate-100"><i class="fas fa-minus"></i></button>
-                     <span id="modal-qty" class="text-2xl font-bold text-slate-800 w-16 text-center cute-font">1</span>
-                     <button onclick="updateQty(1)" class="w-12 h-12 bg-emerald-500 text-white rounded-xl shadow-lg shadow-emerald-200 hover:bg-emerald-600 active:scale-95 transition-transform"><i class="fas fa-plus"></i></button>
-                 </div>
-            </div>
-
-            <div class="pt-2">
-                 <details class="group bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
-                     <summary class="flex items-center justify-between p-4 cursor-pointer hover:bg-slate-50 transition-colors">
-                         <span class="text-sm font-bold text-slate-600 flex items-center gap-2"><i class="fas fa-exclamation-circle text-orange-400"></i> แพ้ส่วนผสม?</span>
-                         <i class="fas fa-chevron-down text-xs text-slate-400 transition-transform group-open:rotate-180"></i>
-                     </summary>
-                     <div class="p-4 pt-0 grid grid-cols-2 gap-2 bg-slate-50/50 border-t border-slate-100">
-                         ${item.ingredients.split(',').map(ing => `
-                            <label class="flex items-center gap-2 text-sm text-slate-600 cursor-pointer p-2 hover:bg-white rounded-lg transition-colors">
-                                <input type="checkbox" name="modal-allergy" value="${ing.trim()}" class="rounded text-emerald-500 focus:ring-emerald-500 border-slate-300 w-4 h-4">
-                                <span>${ing.trim()}</span>
-                            </label>
-                         `).join('')}
-                     </div>
-                 </details>
-            </div>
-        </div>
-
-        <button onclick="confirmAdd('${id}')" class="w-full mt-8 btn-clay py-4 rounded-2xl font-bold text-xl shadow-xl shadow-emerald-200/50 flex justify-center items-center gap-3 group">
-            <span>เพิ่มลงตะกร้า</span>
-            <i class="fas fa-cart-plus group-active:scale-125 transition-transform"></i>
-        </button>
-    `;
-
-    modal.classList.remove('hidden');
-    requestAnimationFrame(() => {
-        backdrop.classList.remove('opacity-0');
-        // Animation for POPUP effect (Scale 100 + Opacity 1)
-        panel.classList.remove('scale-95', 'opacity-0'); 
-        panel.classList.add('scale-100', 'opacity-100');
-    });
-};
-
-window.closeModal = () => {
-    const modal = getEl('item-modal');
-    const backdrop = getEl('modal-backdrop');
-    const panel = getEl('modal-panel');
-    
-    backdrop.classList.add('opacity-0');
-    // Reverse Animation
-    panel.classList.remove('scale-100', 'opacity-100');
-    panel.classList.add('scale-95', 'opacity-0');
-    
-    setTimeout(() => {
-        modal.classList.add('hidden');
-        getEl('modal-content-body').innerHTML = '';
-    }, 300);
-};
-
-window.updateQty = (change) => {
-    const el = getEl('modal-qty');
-    let val = parseInt(el.innerText) + change;
-    if(val < 1) val = 1;
-    el.innerText = val;
-};
-
-window.confirmAdd = (id) => {
-    const item = menuData.find(i => i.id === id);
-    const sizeEl = document.querySelector('input[name="modal-size"]:checked');
-    const size = sizeEl.value;
-    const price = parseFloat(sizeEl.dataset.price);
-    const quantity = parseInt(getEl('modal-qty').innerText);
-    const allergyNodes = document.querySelectorAll('input[name="modal-allergy"]:checked');
-    const allergies = Array.from(allergyNodes).map(n => n.value).sort();
-    
-    const key = `${id}-${size}-${allergies.join(',')}`;
-    
-    if (order.items[key]) {
-        order.items[key].quantity += quantity;
-    } else {
-        order.items[key] = {
-            id, name: item.name, size, price, quantity, allergies, 
-            imageUrl: item.imageUrl
-        };
-    }
-    
-    updateTotal();
-    closeModal();
-    showToast(`เพิ่ม ${item.name} แล้ว`, 'success');
-};
-
-window.updateTotal = () => {
-    let subtotal = 0, totalItems = 0;
-    Object.values(order.items).forEach(item => {
-      subtotal += item.price * item.quantity;
-      totalItems += item.quantity;
-    });
-    order.subtotal = subtotal;
-    order.totalItems = totalItems;
-
-    if(order.discount) {
-        if(subtotal < order.discount.minSpend || totalItems < order.discount.minItems) {
-            order.discount = null;
-            const infoEl = getEl('discount-info');
-            if(infoEl) infoEl.textContent = '';
-        }
-    }
-
-    let discountValue = 0;
-    if (order.discount) {
-      discountValue = order.discount.type === 'percent' 
-        ? (subtotal * order.discount.value) / 100 
-        : order.discount.value;
-      if (typeof order.discount.maxDiscount === 'number') {
-        discountValue = Math.min(discountValue, order.discount.maxDiscount);
-      }
-    }
-    order.total = Math.max(0, subtotal - discountValue);
-
-    cartBadge.innerText = totalItems;
-    cartBadge.classList.toggle('scale-0', totalItems === 0);
-    cartBadge.classList.toggle('scale-100', totalItems > 0);
-    dockTotal.innerText = formatMoney(order.total);
-    
-    const onPaymentPage = !getEl('payment-section').classList.contains('hidden');
-    
-    // MODIFIED LOGIC: Match testver exactly
-    if(totalItems > 0 && !onPaymentPage) {
-        dockContainer.classList.remove('translate-y-full');
-    } else {
-        dockContainer.classList.add('translate-y-full');
-    }
-
-    if (onPaymentPage) renderCheckoutSummary();
-    if (!getEl('cart-sidebar').classList.contains('hidden')) renderCartSidebar();
-};
-
-window.adjustItem = (key, delta) => {
-  if (!order.items[key]) return;
-  order.items[key].quantity += delta;
-  if (order.items[key].quantity <= 0) delete order.items[key];
-  updateTotal();
-};
-
-window.openCart = () => {
-    renderCartSidebar();
-    const sidebar = getEl('cart-sidebar');
-    sidebar.classList.remove('hidden');
-    requestAnimationFrame(() => {
-        getEl('cart-backdrop').classList.remove('opacity-0');
-        getEl('cart-panel').classList.remove('translate-x-full');
-    });
-};
-
-window.closeCart = () => {
-    getEl('cart-backdrop').classList.add('opacity-0');
-    getEl('cart-panel').classList.add('translate-x-full');
-    setTimeout(() => getEl('cart-sidebar').classList.add('hidden'), 300);
-};
-
-function renderCartSidebar() {
-    const container = getEl('cart-items-container');
-    container.innerHTML = '';
-    
-    if(order.totalItems === 0) {
-        container.innerHTML = `<div class="flex flex-col items-center justify-center h-full text-slate-300">
-            <i class="fas fa-basket-shopping text-6xl mb-4"></i>
-            <p class="font-medium">ตะกร้ายังว่างอยู่เลย</p>
-        </div>`;
-    } else {
-        const items = Object.entries(order.items).sort((a,b) => a[1].name.localeCompare(b[1].name));
-        items.forEach(([key, item]) => {
-            container.innerHTML += `
-                <div class="flex gap-4 bg-white p-3 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden group">
-                    <div class="w-20 h-20 rounded-xl bg-slate-50 flex-shrink-0 overflow-hidden border border-slate-50">
-                        <img src="${item.imageUrl}" class="w-full h-full object-contain mix-blend-multiply">
-                    </div>
-                    <div class="flex-1 min-w-0 flex flex-col justify-center">
-                        <div class="flex justify-between items-start mb-1">
-                            <h4 class="font-bold text-slate-800 text-sm truncate pr-2">${item.name}</h4>
-                            <span class="font-bold text-emerald-600 text-sm">฿${(item.price * item.quantity).toFixed(0)}</span>
-                        </div>
-                        <p class="text-xs text-slate-500 mb-2">${item.size}</p>
-                        ${item.allergies.length ? `<p class="text-[10px] text-red-400 truncate bg-red-50 inline-block px-1.5 py-0.5 rounded mb-1">แพ้: ${item.allergies.join(', ')}</p>` : ''}
-                        
-                        <div class="flex justify-end">
-                             <div class="flex items-center gap-3 bg-slate-50 rounded-lg px-2 py-1 border border-slate-100">
-                                 <button onclick="adjustItem('${key}', -1)" class="w-6 h-6 flex items-center justify-center text-slate-400 hover:text-red-500 transition-colors"><i class="fas fa-minus text-xs"></i></button>
-                                 <span class="text-sm font-bold w-6 text-center text-slate-700">${item.quantity}</span>
-                                 <button onclick="adjustItem('${key}', 1)" class="w-6 h-6 flex items-center justify-center text-emerald-500 hover:text-emerald-700 transition-colors"><i class="fas fa-plus text-xs"></i></button>
-                             </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-    }
-    getEl('cart-sidebar-total').innerText = formatMoney(order.subtotal);
-}
-
-getEl('open-cart-btn').addEventListener('click', openCart);
-getEl('go-to-checkout').addEventListener('click', () => {
-    closeCart();
-    getEl('order-form-section').classList.add('hidden');
-    getEl('payment-section').classList.remove('hidden');
-    dockContainer.classList.add('translate-y-full'); 
-    renderCheckoutSummary();
-    renderDeliveryDates(getEl('deliveryLocation').value);
-    getEl('payment-header').scrollIntoView({ behavior: 'smooth', block: 'start' });
-});
-
-getEl('back-to-menu-btn').addEventListener('click', () => {
-    getEl('payment-section').classList.add('hidden');
-    getEl('order-form-section').classList.remove('hidden');
-    updateTotal(); 
-    window.scrollTo({top:0, behavior:'smooth'});
-});
-
-function renderCheckoutSummary() {
-    const container = getEl('order-summary');
-    const items = Object.values(order.items);
-    container.innerHTML = items.map(item => `
-        <div class="flex justify-between items-center py-3 border-b border-dashed border-slate-100 last:border-0 hover:bg-slate-50/50 transition-colors px-1 rounded-lg">
-            <div>
-                <span class="font-bold text-emerald-600 mr-2 bg-emerald-50 px-1.5 rounded text-xs">${item.quantity}x</span>
-                <span class="text-slate-700 text-sm font-bold">${item.name}</span>
-                <span class="text-xs text-slate-400 font-medium">(${item.size})</span>
-                ${item.allergies.length ? `<div class="text-[10px] text-red-400 ml-8 mt-0.5"><i class="fas fa-exclamation-circle"></i> แพ้: ${item.allergies.join(',')}</div>` : ''}
-            </div>
-            <span class="font-bold text-slate-800 text-sm">฿${(item.price * item.quantity).toFixed(0)}</span>
-        </div>
-    `).join('');
-    getEl('subtotal-price').innerText = formatMoney(order.subtotal);
-    getEl('total-price').innerText = formatMoney(order.total);
-    
-    const discSection = getEl('discount-display-section');
-    if(order.discount) {
-        discSection.classList.remove('hidden');
-        getEl('discount-code-display').innerText = order.discount.code;
-        getEl('discount-amount').innerText = `-฿${(order.subtotal - order.total).toFixed(0)}`;
-    } else {
-        discSection.classList.add('hidden');
-    }
-}
-
-getEl('apply-discount-btn').addEventListener('click', () => {
-    const code = getEl('discountCode').value.trim().toUpperCase();
-    const info = getEl('discount-info');
-    if (!code) return;
-    const found = discountCodes.find(c => c.code === code);
-    const today = new Date(); today.setHours(0,0,0,0);
-    const expiry = found ? new Date(found.expiryDate) : null;
-    if(expiry) expiry.setHours(23,59,59,999);
-
-    let msg = '', color = 'red';
-    if (!found) msg = '❌ ไม่พบโค้ดนี้';
-    else if (today > expiry) msg = '❌ โค้ดหมดอายุ';
-    else if (order.subtotal < found.minSpend) msg = `⚠️ ขั้นต่ำ ฿${found.minSpend}`;
-    else if (order.totalItems < found.minItems) msg = `⚠️ ขั้นต่ำ ${found.minItems} ขวด`;
-    else { order.discount = found; msg = '✅ ใช้ส่วนลดสำเร็จ!'; color = 'green'; }
-
-    info.className = `text-xs text-center h-4 mb-2 font-bold ${color === 'green' ? 'text-emerald-500' : 'text-red-500'}`;
-    info.innerHTML = msg;
-    if (color === 'red') order.discount = null;
-    updateTotal();
-});
-
-const generateDeliveryDatesForLocation = (locationKey) => {
-    const cfg = deliveryConfig[locationKey];
-    if (!cfg || !cfg.weekdays || cfg.weekdays.length === 0) return [];
-    const dates = [];
-    const today = new Date(); today.setHours(0,0,0,0);
-    const totalDays = DELIVERY_WEEKS_AHEAD * 7;
-    for (let i = 0; i < totalDays; i++) {
-      const d = new Date(today); d.setDate(today.getDate() + i);
-      if (cfg.weekdays.includes(d.getDay())) {
-        const yyyy = d.getFullYear();
-        const mm = String(d.getMonth() + 1).padStart(2, '0');
-        const dd = String(d.getDate()).padStart(2, '0');
-        dates.push(`${yyyy}-${mm}-${dd}`);
-      }
-    }
-    return dates;
-};
-
-getEl('deliveryLocation').addEventListener('change', (e) => renderDeliveryDates(e.target.value));
-deliveryDatesContainerEl.addEventListener('change', () => {
-    const selectedCount = deliveryDatesContainerEl.querySelectorAll('input:checked').length;
-    deliveryWarningEl.classList.toggle('hidden', selectedCount <= 1);
-});
-
-function renderDeliveryDates(locationKey) {
-    deliveryDatesContainerEl.innerHTML = '';
-    if (!locationKey || !deliveryConfig[locationKey]) {
-      deliveryDatesContainerEl.innerHTML = '<p class="text-center text-slate-400 text-xs font-medium">กรุณาเลือกสถานที่จัดส่งก่อน</p>';
-      return;
-    }
-
-    const now = new Date();
-    const cutoffMs = 12 * 60 * 60 * 1000;
-    const availableDateStrings = generateDeliveryDatesForLocation(locationKey);
-    const validDates = availableDateStrings.filter(dateString => {
-      const deliveryDate = new Date(dateString + 'T00:00:00');
-      return (deliveryDate.getTime() - now.getTime()) >= cutoffMs;
-    });
-
-    if (validDates.length === 0) {
-      deliveryDatesContainerEl.innerHTML = '<p class="text-center text-red-400 text-xs font-medium">❌ ไม่มีรอบจัดส่งเร็วๆ นี้ (ต้องจองล่วงหน้า 12 ชม.)</p>';
-      return;
-    }
-
-    deliveryDatesContainerEl.innerHTML = `<div class="grid grid-cols-2 gap-3 mt-1">
-        ${validDates.map(dateString => {
-            const deliveryDate = new Date(dateString + 'T00:00:00');
-            const formattedDate = deliveryDate.toLocaleDateString('th-TH', { weekday: 'short', day: 'numeric', month: 'short' });
-            return `
-            <label class="cursor-pointer relative group">
-                <input type="checkbox" name="deliveryDate" value="${dateString}" class="peer sr-only">
-                <div class="p-3 border border-slate-200 rounded-xl text-center text-xs bg-white text-slate-600 peer-checked:bg-emerald-500 peer-checked:text-white peer-checked:border-emerald-500 transition-all hover:border-emerald-300 shadow-sm font-medium group-hover:-translate-y-0.5">
-                    ${formattedDate}
-                </div>
-            </label>`;
-        }).join('')}
-    </div>`;
-}
-
-getEl('copy-account-btn').addEventListener('click', () => {
-    const account = getEl('bank-account-number').innerText.replace(/-/g, '');
-    const textArea = document.createElement("textarea");
-    textArea.value = account;
-    textArea.style.position = "fixed"; 
-    textArea.style.left = "-9999px";
-    textArea.style.top = "0";
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-    try {
-      const successful = document.execCommand('copy');
-      if (successful) showToast('คัดลอกเลขบัญชีแล้ว', 'success');
-      else throw new Error('execCommand failed');
-    } catch (err) {
-      navigator.clipboard.writeText(account).then(() => {
-         showToast('คัดลอกเลขบัญชีแล้ว', 'success');
-      }).catch(() => {
-         showToast('คัดลอกไม่สำเร็จ กรุณาจดเลขบัญชี', 'error');
-      });
-    }
-    document.body.removeChild(textArea);
-});
-
-getEl('slipUpload').addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if(file) {
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-            getEl('slip-preview').src = ev.target.result;
-            getEl('slip-preview-container').classList.remove('hidden');
-            getEl('slip-drop-zone').classList.add('hidden');
-        };
-        reader.readAsDataURL(file);
-    }
-});
-
-window.clearSlip = () => {
-    getEl('slipUpload').value = '';
-    getEl('slip-preview-container').classList.add('hidden');
-    getEl('slip-drop-zone').classList.remove('hidden');
-};
-
-const getOrderQueueNumber = () => {
-    const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let result=''; for(let i=0;i<4;i++) result+=chars.charAt(Math.floor(Math.random()*chars.length));
-    return result;
-};
-
-async function fetchWithRetry(url, options, retries=3, delay=1000) {
-    for(let i=0;i<retries;i++){
-      try {
-        const res = await fetch(url, options);
-        if(res.ok) return res;
-        if(res.status >= 500) await new Promise(r=>setTimeout(r, delay*Math.pow(2,i)));
-        else throw new Error(`HTTP error! status: ${res.status}`);
-      } catch(e){
-        if(i<retries-1) await new Promise(r=>setTimeout(r, delay*Math.pow(2,i)));
-        else throw e;
-      }
-    }
-}
-
-getEl('upload-slip-btn').addEventListener('click', async () => {
-    const btn = getEl('upload-slip-btn');
-    const spinner = getEl('upload-slip-spinner');
-    const text = getEl('upload-slip-text');
-    
-    const name = getEl('customerName').value.trim();
-    const phone = getEl('customerPhone').value.trim();
-    const loc = getEl('deliveryLocation').value;
-    const dates = Array.from(document.querySelectorAll('input[name="deliveryDate"]:checked')).map(cb => cb.value);
-    const slip = getEl('slipUpload').files[0];
-    
-    if(!name) return showToast('กรุณากรอกชื่อผู้รับ', 'error');
-    if(!/^\d{10}$/.test(phone)) return showToast('เบอร์โทรศัพท์ไม่ถูกต้อง', 'error');
-    if(!loc) return showToast('กรุณาเลือกสถานที่ส่ง', 'error');
-    if(dates.length === 0) return showToast('เลือกวันที่ต้องการรับของ', 'error');
-    if(!slip) return showToast('กรุณาแนบสลิปโอนเงิน', 'error');
-
-    btn.disabled = true;
-    text.classList.add('hidden');
-    spinner.classList.remove('hidden');
-    
-    const finalOrder = {
-      queueNumber: getOrderQueueNumber(), 
-      customerName: name,
-      customerContact: { phone }, 
-      customerNote: getEl('customerNote').value.trim(),
-      deliveryLocationKey: loc,
-      deliveryLocationLabel: deliveryConfig[loc]?.label || '',
-      deliveryDates: dates, 
-      orderDate: new Date().toISOString(),
-      items: Object.values(order.items).filter(i=>i.quantity>0),
-      subtotal: order.subtotal, 
-      discount: order.discount, 
-      total: order.total, 
-      totalItems: order.totalItems
+import React, { useState, useRef } from 'react';
+import { Plus, Trash2, Calculator, ShoppingBag, Users, User, ArrowRight, Receipt, Download, X, Globe } from 'lucide-react';
+
+export default function App() {
+  const [items, setItems] = useState([
+    { id: 1, name: 'Dinner', amount: 350, type: 'shared' },
+    { id: 2, name: 'Souvenirs', amount: 500, type: 'personal' },
+    { id: 3, name: 'My Coffee', amount: 120, type: 'my_personal' },
+  ]);
+  const [newItemName, setNewItemName] = useState('');
+  const [newItemAmount, setNewItemAmount] = useState('');
+  const [newItemType, setNewItemType] = useState('shared');
+  const [currencyRate, setCurrencyRate] = useState(1);
+  const [showSlip, setShowSlip] = useState(false);
+  const [tripName, setTripName] = useState('International Trip'); // Editable trip name
+  const slipRef = useRef(null);
+  
+  // Add new item
+  const handleAddItem = (e) => {
+    e.preventDefault();
+    if (!newItemName || !newItemAmount) return;
+
+    const newItem = {
+      id: Date.now(),
+      name: newItemName,
+      amount: parseFloat(newItemAmount),
+      type: newItemType,
     };
 
-    const formData = new FormData();
-    formData.append('slipImage', slip);
-    Object.entries(finalOrder).forEach(([key, value]) => {
-      formData.append(key, typeof value === 'object' ? JSON.stringify(value) : value);
-    });
-    
-    try {
-        await fetchWithRetry(n8nWebhookUrl, { method: 'POST', body: formData });
-        
-        renderFinalSummary(finalOrder);
-        getEl('payment-section').classList.add('hidden');
-        getEl('confirmation-section').classList.remove('hidden');
-        getEl('confirmation-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        
-    } catch(err) {
-        console.error(err);
-        showToast('ส่งข้อมูลไม่สำเร็จ กรุณาลองใหม่', 'error');
-        btn.disabled = false;
-        text.classList.remove('hidden');
-        spinner.classList.add('hidden');
-    }
-});
+    setItems([...items, newItem]);
+    setNewItemName('');
+    setNewItemAmount('');
+  };
 
-function renderFinalSummary(data) {
-    const container = getEl('final-order-summary');
-    let discountAmount = 0;
-    if (data.discount) {
-         discountAmount = data.discount.type === 'fixed' ? data.discount.value : (data.subtotal * data.discount.value) / 100;
-         if (typeof data.discount.maxDiscount === 'number') discountAmount = Math.min(discountAmount, data.discount.maxDiscount);
-    }
-    
-    const orderDateObj = new Date(data.orderDate);
-    const orderDateStr = orderDateObj.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-    const deliveryDatesStr = data.deliveryDates.map(d => {
-        const dd = new Date(d);
-        return dd.toLocaleDateString('th-TH', { day: 'numeric', month: 'short' });
-    }).join(', ');
+  // Remove item
+  const handleDeleteItem = (id) => {
+    setItems(items.filter(item => item.id !== id));
+  };
 
-    container.innerHTML = `
-        <div class="space-y-3 mb-6 text-sm text-slate-600">
-            <div class="flex justify-between border-b border-dashed border-slate-200 pb-2">
-                <span class="font-bold text-slate-500">วันที่สั่ง</span>
-                <span class="font-medium font-mono">${orderDateStr}</span>
-            </div>
-            <div class="flex justify-between border-b border-dashed border-slate-200 pb-2">
-                <span class="font-bold text-slate-500">Order ID</span>
-                <span class="font-mono font-bold text-emerald-600 bg-emerald-50 px-2 rounded">${data.queueNumber}</span>
-            </div>
-            <div class="flex justify-between border-b border-dashed border-slate-200 pb-2">
-                <span class="font-bold text-slate-500">สถานที่ส่ง</span>
-                <span class="text-right max-w-[60%] font-medium">${data.deliveryLocationLabel}</span>
-            </div>
-            <div class="flex justify-between border-b border-dashed border-slate-200 pb-2">
-                <span class="font-bold text-slate-500">ชื่อลูกค้า</span>
-                <span class="font-medium">${data.customerName}</span>
-            </div>
-             <div class="flex justify-between border-b border-dashed border-slate-200 pb-2">
-                <span class="font-bold text-slate-500">วันที่รับของ</span>
-                <span class="text-right max-w-[60%] text-emerald-600 font-bold">${deliveryDatesStr}</span>
-            </div>
+  // Calculations
+  const totalSharedForeign = items.filter(i => i.type === 'shared').reduce((sum, i) => sum + i.amount, 0);
+  const totalPersonalForeign = items.filter(i => i.type === 'personal').reduce((sum, i) => sum + i.amount, 0);
+  const totalMyPersonalForeign = items.filter(i => i.type === 'my_personal').reduce((sum, i) => sum + i.amount, 0);
+  
+  // Converted to Home Currency (THB)
+  const totalSharedTHB = totalSharedForeign * currencyRate;
+  const totalPersonalTHB = totalPersonalForeign * currencyRate;
+  const totalMyPersonalTHB = totalMyPersonalForeign * currencyRate;
+
+  // Final Calculation for Girlfriend
+  const gfShareFromShared = totalSharedTHB / 2;
+  const gfTotalOwed = gfShareFromShared + totalPersonalTHB;
+
+  // Handle Save Image
+  const handleDownloadImage = async () => {
+    // Load html2canvas dynamically if not present
+    if (!window.html2canvas) {
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+      document.body.appendChild(script);
+      await new Promise(resolve => script.onload = resolve);
+    }
+
+    if (slipRef.current && window.html2canvas) {
+      try {
+        const canvas = await window.html2canvas(slipRef.current, {
+          scale: 2, // High resolution
+          backgroundColor: '#ffffff',
+          logging: false,
+          useCORS: true
+        });
+        const link = document.createElement('a');
+        link.download = `Trip_Expense_Slip_${Date.now()}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      } catch (err) {
+        console.error("Error generating image:", err);
+        alert("Could not generate image. Please try taking a screenshot instead.");
+      }
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 font-sans text-gray-800 p-4 md:p-8 relative">
+      <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+        
+        {/* Header */}
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white flex justify-between items-start">
+          <div>
+            <h1 className="text-2xl font-bold flex items-center gap-2">
+              <Globe className="w-6 h-6" />
+              International Trip Splitter
+            </h1>
+            <input 
+              type="text" 
+              value={tripName}
+              onChange={(e) => setTripName(e.target.value)}
+              className="bg-transparent border-b border-white/30 text-blue-100 text-sm mt-1 focus:outline-none focus:border-white w-full placeholder-blue-200"
+              placeholder="Enter Trip Name (e.g. Japan Trip)"
+            />
+          </div>
+          <button 
+            onClick={() => setShowSlip(true)}
+            className="bg-white/20 hover:bg-white/30 text-white p-2 rounded-lg transition backdrop-blur-sm flex flex-col items-center text-[10px] gap-1"
+          >
+            <Receipt className="w-5 h-5" />
+            <span>Slip</span>
+          </button>
         </div>
-        
-        <p class="font-bold text-slate-800 text-xs uppercase mb-3 tracking-wider">รายการสินค้า</p>
-        <div class="space-y-2 mb-6 bg-slate-50/80 p-4 rounded-2xl border border-slate-100">
-             ${data.items.map(i => `
-                <div class="flex justify-between text-sm text-slate-600">
-                    <span class="font-medium">${i.quantity}x ${i.name} (${i.size})</span>
-                    <span class="font-bold">฿${(i.price*i.quantity).toFixed(0)}</span>
+
+        {/* Settings: Currency Rate */}
+        <div className="p-4 bg-blue-50 border-b border-blue-100 flex flex-col sm:flex-row gap-4 items-center justify-between">
+          <div className="text-sm text-gray-600">
+            <span className="font-semibold text-blue-700">Exchange Rate:</span> 
+            <span className="text-xs ml-1 text-gray-500">(Multiply Factor to THB)</span>
+          </div>
+          <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-blue-200 shadow-sm">
+            <span className="text-sm font-medium text-gray-500">Rate:</span>
+            <input 
+              type="number" 
+              value={currencyRate}
+              onChange={(e) => setCurrencyRate(parseFloat(e.target.value) || 1)}
+              className="w-20 text-right font-bold text-gray-800 outline-none border-b border-dashed border-gray-300 focus:border-blue-500"
+              placeholder="1.0"
+            />
+          </div>
+        </div>
+
+        {/* Input Form */}
+        <div className="p-6 border-b border-gray-100">
+          <form onSubmit={handleAddItem} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-wide">Item Name</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Train Ticket, Dinner"
+                  value={newItemName}
+                  onChange={(e) => setNewItemName(e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-wide">Amount (Foreign)</label>
+                <input
+                  type="number"
+                  placeholder="0.00"
+                  value={newItemAmount}
+                  onChange={(e) => setNewItemAmount(e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
+                />
+              </div>
+            </div>
+
+            {/* Type Selection Buttons */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 bg-gray-100 p-1 rounded-lg">
+              <button
+                type="button"
+                onClick={() => setNewItemType('shared')}
+                className={`px-2 py-2 rounded-md text-sm font-medium transition-all flex items-center justify-center gap-2 ${
+                  newItemType === 'shared' 
+                    ? 'bg-white text-blue-600 shadow-sm' 
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                <Users className="w-4 h-4" />
+                Shared
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => setNewItemType('personal')}
+                className={`px-2 py-2 rounded-md text-sm font-medium transition-all flex items-center justify-center gap-2 ${
+                  newItemType === 'personal' 
+                    ? 'bg-white text-indigo-600 shadow-sm' 
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                <ShoppingBag className="w-4 h-4" />
+                Her/Him Personal
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setNewItemType('my_personal')}
+                className={`px-2 py-2 rounded-md text-sm font-medium transition-all flex items-center justify-center gap-2 ${
+                  newItemType === 'my_personal' 
+                    ? 'bg-white text-emerald-600 shadow-sm' 
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                <User className="w-4 h-4" />
+                Me
+              </button>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-black transition flex items-center justify-center gap-2 shadow-lg shadow-gray-200"
+            >
+              <Plus className="w-4 h-4" />
+              Add Item
+            </button>
+          </form>
+        </div>
+
+        {/* Item List */}
+        <div className="bg-gray-50 max-h-60 overflow-y-auto p-4 space-y-2">
+          {items.length === 0 && (
+            <div className="text-center py-8 text-gray-400">No items yet</div>
+          )}
+          {items.map((item) => (
+            <div key={item.id} className="bg-white p-3 rounded-lg border border-gray-100 flex items-center justify-between group hover:shadow-md transition">
+              <div className="flex items-center gap-3">
+                <div className={`w-2 h-10 rounded-full ${
+                  item.type === 'shared' ? 'bg-blue-400' : 
+                  item.type === 'personal' ? 'bg-indigo-400' : 'bg-emerald-400'
+                }`}></div>
+                <div>
+                  <h3 className="font-medium text-gray-800">{item.name}</h3>
+                  <p className="text-xs text-gray-500 flex items-center gap-1">
+                    {item.type === 'shared' && 'Shared'}
+                    {item.type === 'personal' && 'Her/Him Personal'}
+                    {item.type === 'my_personal' && 'My Personal'}
+                  </p>
                 </div>
-             `).join('')}
-        </div>
-        
-        <div class="pt-4 border-t border-slate-100 space-y-2">
-            <div class="flex justify-between text-xs text-slate-500 font-medium">
-                <span>ยอดรวม</span><span>฿${data.subtotal.toFixed(0)}</span>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="text-right">
+                  <span className="block font-mono font-semibold text-gray-700">
+                    {item.amount.toLocaleString()} 
+                  </span>
+                  {item.type === 'my_personal' && (
+                    <span className="text-[10px] text-emerald-500 font-medium">Not billed</span>
+                  )}
+                </div>
+                <button 
+                  onClick={() => handleDeleteItem(item.id)}
+                  className="text-gray-300 hover:text-red-500 transition p-1"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
             </div>
-            ${data.discount ? `
-            <div class="flex justify-between text-xs text-red-500 font-medium">
-                <span>ส่วนลด (${data.discount.code})</span><span>-฿${discountAmount.toFixed(0)}</span>
-            </div>` : ''}
-            <div class="flex justify-between items-end pt-2">
-                <span class="font-bold text-slate-800 text-lg">ยอดสุทธิ</span>
-                <span class="text-3xl font-bold text-emerald-600 cute-font">฿${data.total.toFixed(0)}</span>
-            </div>
+          ))}
         </div>
-    `;
-}
 
-window.showToast = (msg, type) => {
-    const div = document.createElement('div');
-    const color = type === 'success' ? 'bg-emerald-500' : 'bg-red-500';
-    const icon = type === 'success' ? 'check-circle' : 'exclamation-circle';
-    div.className = `fixed top-6 left-1/2 -translate-x-1/2 ${color} text-white px-6 py-3 rounded-2xl shadow-xl shadow-emerald-200/50 z-[100] flex items-center gap-3 transition-all transform -translate-y-20 opacity-0 border border-white/20 backdrop-blur-md`;
-    div.innerHTML = `<i class="fas fa-${icon} text-lg"></i> <span class="font-bold text-sm tracking-wide">${msg}</span>`;
-    document.body.appendChild(div);
-    requestAnimationFrame(() => div.classList.remove('-translate-y-20', 'opacity-0'));
-    setTimeout(() => {
-        div.classList.add('-translate-y-20', 'opacity-0');
-        setTimeout(() => div.remove(), 500);
-    }, 3000);
-};
+        {/* Summary Card */}
+        <div className="bg-gray-900 text-white p-6">
+          <div className="grid grid-cols-3 gap-4 mb-6 text-center divide-x divide-gray-700">
+            <div>
+              <p className="text-gray-400 text-[10px] uppercase tracking-wider mb-1">Shared Pool (THB)</p>
+              <p className="text-lg font-medium text-blue-300">
+                {totalSharedTHB.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}
+              </p>
+            </div>
+            <div>
+               <p className="text-gray-400 text-[10px] uppercase tracking-wider mb-1">Her/Him Personal (THB)</p>
+               <p className="text-lg font-medium text-indigo-300">
+                 {totalPersonalTHB.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}
+               </p>
+            </div>
+            <div>
+               <p className="text-gray-400 text-[10px] uppercase tracking-wider mb-1">My Personal (THB)</p>
+               <p className="text-lg font-medium text-emerald-300">
+                 {totalMyPersonalTHB.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}
+               </p>
+            </div>
+          </div>
 
-function setupEventListeners() {
-    getEl('modal-panel').addEventListener('click', e => e.stopPropagation());
-    getEl('cart-panel').addEventListener('click', e => e.stopPropagation());
+          <div className="pt-6 border-t border-gray-700">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="text-center sm:text-left">
+                <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+                  Total Due
+                </h2>
+                <p className="text-xs text-gray-400 mt-1">
+                  50% Shared + 100% Personal (Converted)
+                </p>
+              </div>
+              <div className="bg-white text-gray-900 px-6 py-3 rounded-xl font-bold text-2xl shadow-lg shadow-blue-900/20 flex items-center gap-2">
+                {gfTotalOwed.toLocaleString(undefined, {minimumFractionDigits: 2})}
+                <span className="text-sm font-normal text-gray-500">THB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      
+      <div className="text-center mt-6 text-gray-400 text-sm">
+        <p>Calculated for Nut & OEY </p>
+      </div>
+
+      {/* SLIP MODAL */}
+      {showSlip && (
+        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-white w-full max-w-md rounded-xl overflow-hidden shadow-2xl relative">
+            <button 
+              onClick={() => setShowSlip(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            {/* Content to be Captured */}
+            <div ref={slipRef} className="bg-white p-8">
+              <div className="text-center border-b border-gray-200 pb-6 mb-6">
+                <div className="flex justify-center mb-3">
+                   <div className="bg-blue-100 p-3 rounded-full">
+                     <Receipt className="w-8 h-8 text-blue-600" />
+                   </div>
+                </div>
+                <h2 className="text-xl font-bold text-gray-900 uppercase tracking-wide">Expense Summary</h2>
+                <p className="text-sm text-gray-500 mt-1">{tripName} Settlement</p>
+                <div className="flex justify-center items-center gap-2 mt-2">
+                    <span className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600">Rate: {currencyRate}</span>
+                    <span className="text-xs text-gray-400">{new Date().toLocaleDateString('en-GB')}</span>
+                </div>
+              </div>
+
+              <div className="space-y-3 mb-6">
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-gray-500">Shared Pool Total</span>
+                  <span className="font-mono font-medium">{totalSharedTHB.toLocaleString()} THB</span>
+                </div>
+                <div className="flex justify-between items-center text-sm border-b border-dashed border-gray-200 pb-3">
+                   <span className="text-gray-500 pl-4 text-xs">↳ Your Share (50%)</span>
+                   <span className="font-mono text-blue-600">{(totalSharedTHB/2).toLocaleString()} THB</span>
+                </div>
+                
+                <div className="flex justify-between items-center text-sm pt-1">
+                  <span className="text-gray-500">Personal Expenses</span>
+                  <span className="font-mono text-indigo-600 font-medium">{totalPersonalTHB.toLocaleString()} THB</span>
+                </div>
+              </div>
+
+              {items.length > 0 && (
+                <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                  <h3 className="text-xs font-bold text-gray-400 uppercase mb-3">Item Breakdown</h3>
+                  <ul className="space-y-2">
+                    {items.filter(i => i.type !== 'my_personal').map(item => (
+                      <li key={item.id} className="flex justify-between text-xs text-gray-600">
+                        <span>{item.name} <span className="text-[10px] text-gray-400">({item.type === 'shared' ? 'Shared' : 'Personal'})</span></span>
+                        <span className="font-mono">{(item.amount * currencyRate).toLocaleString()}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <div className="bg-gray-900 text-white p-4 rounded-xl flex justify-between items-center">
+                <span className="font-medium text-gray-300 text-sm">Total To Pay</span>
+                <span className="text-xl font-bold">{gfTotalOwed.toLocaleString()} THB</span>
+              </div>
+              
+              <div className="text-center mt-6">
+                <p className="text-[10px] text-gray-400 uppercase tracking-widest">Calculated by Nut & Rose</p>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="p-4 bg-gray-50 border-t border-gray-100 flex gap-3">
+              <button 
+                onClick={handleDownloadImage}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg flex items-center justify-center gap-2 transition"
+              >
+                <Download className="w-4 h-4" />
+                Save Image
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
-</script>
-</body>
-</html>
