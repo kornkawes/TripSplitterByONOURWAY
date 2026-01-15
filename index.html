@@ -45,16 +45,11 @@
             display: block;
         }
         
-        /* Hide Scrollbar for cleaner look but keep functionality */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
+        /* Hide Scrollbar */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Shake animation for delete mode */
+        /* Shake animation */
         @keyframes shake {
             0% { transform: rotate(0deg); }
             25% { transform: rotate(1deg); }
@@ -62,9 +57,7 @@
             75% { transform: rotate(-1deg); }
             100% { transform: rotate(0deg); }
         }
-        .shake-animation {
-            animation: shake 0.3s infinite;
-        }
+        .shake-animation { animation: shake 0.3s infinite; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-700 pb-safe">
@@ -72,7 +65,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useRef, useEffect } = React;
+        const { useState, useRef, useEffect, useMemo } = React;
 
         // --- ICONS ---
         const Icons = {
@@ -87,74 +80,85 @@
             User: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
             Calendar: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>,
             Refresh: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>,
-            Check: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><polyline points="20 6 9 17 4 12"/></svg>
+            Check: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><polyline points="20 6 9 17 4 12"/></svg>,
+            Copy: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>,
+            PieChart: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>,
+            Trash: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
         };
 
-        // --- COLORS FOR SLIP ---
+        // --- COLORS & CATEGORIES ---
         const PERSON_COLORS = [
             'bg-rose-500', 'bg-blue-500', 'bg-emerald-500', 'bg-amber-500', 
             'bg-purple-500', 'bg-cyan-500', 'bg-pink-500', 'bg-indigo-500',
             'bg-lime-500', 'bg-orange-500', 'bg-teal-500', 'bg-fuchsia-500'
         ];
 
+        const CATEGORIES = {
+            food: { id: 'food', icon: '🍔', label: 'อาหาร', color: 'bg-orange-100 text-orange-600' },
+            transport: { id: 'transport', icon: '🚕', label: 'เดินทาง', color: 'bg-blue-100 text-blue-600' },
+            shopping: { id: 'shopping', icon: '🛍️', label: 'ช้อปปิ้ง', color: 'bg-pink-100 text-pink-600' },
+            activity: { id: 'activity', icon: '🎟️', label: 'กิจกรรม', color: 'bg-purple-100 text-purple-600' },
+            stay: { id: 'stay', icon: '🏨', label: 'ที่พัก', color: 'bg-teal-100 text-teal-600' },
+            other: { id: 'other', icon: '📝', label: 'อื่นๆ', color: 'bg-slate-100 text-slate-600' },
+        };
+
         function App() {
-            // --- STATE ---
-            const [people, setPeople] = useState([
+            // --- STATE INIT FROM LOCAL STORAGE ---
+            const loadState = (key, defaultVal) => {
+                const saved = localStorage.getItem(key);
+                if (saved) return JSON.parse(saved);
+                return defaultVal;
+            };
+
+            const [people, setPeople] = useState(() => loadState('ts_people', [
                 { id: 'me', name: 'Me', isMe: true },
                 { id: 'p2', name: 'Friend', isMe: false }
-            ]);
+            ]));
+            
+            const [items, setItems] = useState(() => loadState('ts_items', []));
+            const [tripName, setTripName] = useState(() => loadState('ts_tripName', 'My Trip'));
+            const [currencyRate, setCurrencyRate] = useState(() => loadState('ts_rate', 1));
+            const [baseCurrency, setBaseCurrency] = useState(() => loadState('ts_currency', 'THB'));
+
+            // Auto-Save Effect
+            useEffect(() => {
+                localStorage.setItem('ts_people', JSON.stringify(people));
+                localStorage.setItem('ts_items', JSON.stringify(items));
+                localStorage.setItem('ts_tripName', JSON.stringify(tripName));
+                localStorage.setItem('ts_rate', JSON.stringify(currencyRate));
+                localStorage.setItem('ts_currency', JSON.stringify(baseCurrency));
+            }, [people, items, tripName, currencyRate, baseCurrency]);
+
+            // Temp State
             const [newPersonName, setNewPersonName] = useState('');
             const [isAddingPerson, setIsAddingPerson] = useState(false);
             const [isDeleteMode, setIsDeleteMode] = useState(false);
-
-            // Item State
-            const [items, setItems] = useState([]);
             
             // Form State
             const [newItemName, setNewItemName] = useState('');
             const [newItemAmount, setNewItemAmount] = useState('');
             const [newItemDate, setNewItemDate] = useState(new Date().toISOString().split('T')[0]);
-            
-            // Multi-select Assignee State
+            const [newItemCategory, setNewItemCategory] = useState('food');
             const [selectedAssignees, setSelectedAssignees] = useState([]); 
 
+            // UI State
+            const [showSlip, setShowSlip] = useState(false);
+            const slipRef = useRef(null);
+            const inputRef = useRef(null);
+
             useEffect(() => {
+                // Initial select everyone
                 if (selectedAssignees.length === 0 && people.length > 0) {
                      setSelectedAssignees(people.map(p => p.id));
                 }
             }, [people]);
 
-            // Currency State
-            const [currencyRate, setCurrencyRate] = useState(1);
-            const [baseCurrency, setBaseCurrency] = useState('THB'); // Default base currency for rate fetching
-            const [isFetchingRate, setIsFetchingRate] = useState(false);
-            
-            // UI State
-            const [showSlip, setShowSlip] = useState(false);
-            const [tripName, setTripName] = useState('My Trip');
-            const slipRef = useRef(null);
-            const inputRef = useRef(null);
-
             // --- PEOPLE MANAGEMENT ---
             const handleAddPerson = (e) => {
-                // Prevent form submission if triggered by enter key in input
-                if (e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
-                
-                if (!newPersonName.trim()) {
-                    // Optional: Don't close if empty, just do nothing or close
-                    // setIsAddingPerson(false); 
-                    return;
-                }
-                const newPerson = {
-                    id: `p${Date.now()}`,
-                    name: newPersonName.trim(),
-                    isMe: false
-                };
+                if (e) { e.preventDefault(); e.stopPropagation(); }
+                if (!newPersonName.trim()) return;
+                const newPerson = { id: `p${Date.now()}`, name: newPersonName.trim(), isMe: false };
                 setPeople([...people, newPerson]);
-                // Automatically add new person to selection for convenience
                 setSelectedAssignees(prev => [...prev, newPerson.id]);
                 setNewPersonName('');
                 setIsAddingPerson(false);
@@ -166,22 +170,13 @@
                 setSelectedAssignees(prev => prev.filter(pid => pid !== id));
             };
 
-            // Focus input when adding person
-            useEffect(() => {
-                if (isAddingPerson && inputRef.current) {
-                    inputRef.current.focus();
-                }
-            }, [isAddingPerson]);
+            useEffect(() => { if (isAddingPerson && inputRef.current) inputRef.current.focus(); }, [isAddingPerson]);
 
             // --- ITEM MANAGEMENT ---
             const toggleAssignee = (id) => {
-                if (isDeleteMode) return; // Prevent selection toggle in delete mode
-                
+                if (isDeleteMode) return;
                 if (selectedAssignees.includes(id)) {
-                    // Prevent removing the last person (at least one must be selected)
-                    if (selectedAssignees.length > 1) {
-                        setSelectedAssignees(prev => prev.filter(pid => pid !== id));
-                    }
+                    if (selectedAssignees.length > 1) setSelectedAssignees(prev => prev.filter(pid => pid !== id));
                 } else {
                     setSelectedAssignees(prev => [...prev, id]);
                 }
@@ -194,48 +189,40 @@
             const handleAddItem = (e) => {
                 e.preventDefault();
                 if (!newItemName || !newItemAmount || selectedAssignees.length === 0) return;
-
                 const newItem = {
                     id: Date.now(),
                     name: newItemName,
                     amount: parseFloat(newItemAmount),
-                    assignedTo: [...selectedAssignees], // Copy array
-                    date: newItemDate
+                    assignedTo: [...selectedAssignees],
+                    date: newItemDate,
+                    category: newItemCategory
                 };
-
                 setItems([...items, newItem]);
                 setNewItemName('');
                 setNewItemAmount('');
-                // Date stays same (convenient for adding multiple items for same day)
-                // Selection stays same
             };
 
-            const handleDeleteItem = (id) => {
-                setItems(items.filter(item => item.id !== id));
-            };
+            const handleDeleteItem = (id) => setItems(items.filter(item => item.id !== id));
 
             // --- RATE FETCHING ---
+            const [isFetchingRate, setIsFetchingRate] = useState(false);
             const fetchRate = async () => {
-                if (baseCurrency === 'THB') {
-                    setCurrencyRate(1);
-                    return;
-                }
-                
+                if (baseCurrency === 'THB') { setCurrencyRate(1); return; }
                 setIsFetchingRate(true);
                 try {
-                    // Using open.er-api.com (free, no key)
                     const response = await fetch(`https://open.er-api.com/v6/latest/${baseCurrency}`);
                     const data = await response.json();
-                    if (data && data.rates && data.rates.THB) {
-                        setCurrencyRate(data.rates.THB);
-                    } else {
-                        alert("ไม่สามารถดึงเรทอัตโนมัติได้ กรุณากรอกเอง");
-                    }
-                } catch (error) {
-                    console.error("Rate fetch error:", error);
-                    alert("เกิดข้อผิดพลาดในการดึงเรทเงิน");
-                } finally {
-                    setIsFetchingRate(false);
+                    if (data?.rates?.THB) setCurrencyRate(data.rates.THB);
+                    else alert("ไม่สามารถดึงเรทอัตโนมัติได้");
+                } catch { alert("เกิดข้อผิดพลาดในการดึงเรทเงิน"); } 
+                finally { setIsFetchingRate(false); }
+            };
+
+            // --- RESET DATA ---
+            const handleResetData = () => {
+                if (confirm('ต้องการล้างข้อมูลทั้งหมดและเริ่มใหม่ใช่ไหม?')) {
+                    localStorage.clear();
+                    window.location.reload();
                 }
             };
 
@@ -244,20 +231,45 @@
                 let debt = 0;
                 items.forEach(item => {
                     if (item.assignedTo.includes(personId)) {
-                        // Amount divided by number of people sharing this item
                         debt += item.amount / item.assignedTo.length;
                     }
                 });
                 return debt * currencyRate;
             };
 
-            // Total cost of trip (foreign)
             const totalTripForeign = items.reduce((sum, item) => sum + item.amount, 0);
-            
-            // Total Shared Pool (Anything with > 1 person)
-            const totalSharedForeign = items
-                .filter(i => i.assignedTo.length > 1)
-                .reduce((sum, i) => sum + i.amount, 0);
+            const totalSharedForeign = items.filter(i => i.assignedTo.length > 1).reduce((sum, i) => sum + i.amount, 0);
+
+            // Pie Chart Data
+            const categoryData = useMemo(() => {
+                const data = {};
+                items.forEach(item => {
+                    if (!data[item.category]) data[item.category] = 0;
+                    data[item.category] += item.amount;
+                });
+                return Object.entries(data).map(([catId, amount]) => ({
+                    ...CATEGORIES[catId],
+                    amount: amount * currencyRate,
+                    percent: (amount / totalTripForeign) * 100
+                })).sort((a,b) => b.amount - a.amount);
+            }, [items, currencyRate, totalTripForeign]);
+
+            // --- COPY TEXT ---
+            const handleCopyText = () => {
+                let text = `🧾 สรุปค่าใช้จ่ายทริป: ${tripName}\n`;
+                text += `📅 วันที่: ${new Date().toLocaleDateString('th-TH')}\n`;
+                text += `💸 ยอดกองกลางรวม: ${(totalSharedForeign * currencyRate).toLocaleString(undefined, {maximumFractionDigits:0})} THB\n`;
+                text += `------------------\n`;
+                text += `ยอดที่ต้องคืน (ให้ ${people.find(p=>p.isMe)?.name}):\n`;
+                people.filter(p => !p.isMe).forEach(p => {
+                    const debt = calculatePersonDebt(p.id);
+                    text += `👤 ${p.name}: ${debt.toLocaleString(undefined, {maximumFractionDigits:0})} THB\n`;
+                });
+                text += `------------------\n`;
+                text += `Calculated by Trip Splitter`;
+
+                navigator.clipboard.writeText(text).then(() => alert("คัดลอกสรุปยอดเรียบร้อย!"));
+            };
 
             // --- HELPERS ---
             const getAssigneeText = (assigneeIds) => {
@@ -266,44 +278,66 @@
                     const person = people.find(p => p.id === assigneeIds[0]);
                     return `ส่วนตัว: ${person ? person.name : 'Unknown'}`;
                 }
-                // Partial share
                 const names = assigneeIds.map(id => people.find(p => p.id === id)?.name).join(', ');
                 return `หารกัน: ${names}`;
             };
-            
-            const formatDate = (dateString) => {
-                if (!dateString) return '';
-                const date = new Date(dateString);
-                return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-            };
+            const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '';
+            const getPersonColor = (id) => PERSON_COLORS[people.findIndex(p => p.id === id) % PERSON_COLORS.length] || 'bg-gray-400';
 
-            const getPersonColor = (id) => {
-                const index = people.findIndex(p => p.id === id);
-                if (index === -1) return 'bg-gray-400';
-                return PERSON_COLORS[index % PERSON_COLORS.length];
-            };
-
-            // --- SLIP GROUPING LOGIC ---
             const getGroupedItemsForSlip = () => {
                 const grouped = {};
                 items.forEach(item => {
                     const normalizedName = item.name.trim().toLowerCase();
-                    // Create key from name AND the exact set of assignees
                     const splitSignature = [...item.assignedTo].sort().join('|');
                     const key = `${normalizedName}::${splitSignature}`;
-                    
-                    if (!grouped[key]) {
-                        grouped[key] = {
-                            displayName: item.name.trim(), // Keep original casing for display
-                            assignedTo: item.assignedTo,
-                            totalAmount: 0,
-                            count: 0
-                        };
-                    }
+                    if (!grouped[key]) grouped[key] = { displayName: item.name.trim(), assignedTo: item.assignedTo, totalAmount: 0, count: 0 };
                     grouped[key].totalAmount += item.amount;
                     grouped[key].count += 1;
                 });
                 return Object.values(grouped);
+            };
+
+            // --- PIE CHART COMPONENT ---
+            const PieChart = ({ data }) => {
+                if (!data || data.length === 0) return null;
+                let cumulativePercent = 0;
+                const slices = data.map((cat, i) => {
+                    const start = cumulativePercent;
+                    cumulativePercent += cat.percent;
+                    return (
+                        <div key={i} style={{
+                            width: '100%', height: '100%', position: 'absolute', borderRadius: '50%',
+                            background: `conic-gradient(transparent ${start}%, currentColor ${start}% ${cumulativePercent}%, transparent ${cumulativePercent}%)`,
+                            color: cat.color.split(' ')[1].replace('text-', '') // Hacky color extraction for simplicity
+                        }} className={cat.color.split(' ')[1]} />
+                    );
+                });
+                
+                // Fallback for conic-gradient simplicity with inline styles for colors
+                const conicSegments = data.map(d => `${d.color === 'bg-orange-100 text-orange-600' ? '#f97316' : 
+                                                      d.color === 'bg-blue-100 text-blue-600' ? '#2563eb' :
+                                                      d.color === 'bg-pink-100 text-pink-600' ? '#db2777' :
+                                                      d.color === 'bg-purple-100 text-purple-600' ? '#9333ea' :
+                                                      d.color === 'bg-teal-100 text-teal-600' ? '#0d9488' : '#64748b'} 0 ${d.percent}%`).join(', ');
+
+                return (
+                    <div className="flex items-center gap-6 justify-center py-4">
+                        <div className="w-32 h-32 rounded-full relative shrink-0" style={{ background: `conic-gradient(${conicSegments})` }}>
+                            <div className="absolute inset-0 m-auto w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-inner">
+                                <span className="text-xs font-bold text-slate-400">Expenses</span>
+                            </div>
+                        </div>
+                        <div className="space-y-2 text-xs">
+                            {data.map((cat, i) => (
+                                <div key={i} className="flex items-center gap-2">
+                                    <div className={`w-3 h-3 rounded-full ${cat.color.split(' ')[1].replace('text-', 'bg-')}`}></div>
+                                    <span className="w-16 truncate">{cat.label}</span>
+                                    <span className="font-mono font-medium">{cat.amount.toLocaleString(undefined, {maximumFractionDigits:0})}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                );
             };
 
             return (
@@ -311,7 +345,11 @@
                     <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100 mb-8">
                     
                         {/* Header */}
-                        <div className="bg-gradient-to-r from-indigo-400 to-purple-400 p-6 text-white">
+                        <div className="bg-gradient-to-r from-indigo-400 to-purple-400 p-6 text-white relative">
+                            <button onClick={handleResetData} className="absolute top-4 right-4 text-indigo-100 hover:text-white p-2 rounded-full hover:bg-white/20 transition" title="ล้างข้อมูล">
+                                <Icons.Trash className="w-4 h-4" />
+                            </button>
+                            
                             <div className="flex flex-col sm:flex-row justify-between items-start mb-1 gap-4">
                                 <div className="w-full">
                                     <h1 className="text-2xl font-bold flex items-center gap-2">
@@ -319,7 +357,7 @@
                                         Trip Splitter
                                     </h1>
                                     <p className="text-indigo-50 text-sm mt-1 font-light opacity-90">
-                                        สำหรับสายเปย์ที่ 'สำรองจ่าย' ไปก่อน! ช่วยหารค่าใช้จ่ายทริปและสรุปยอด
+                                        สำหรับสายเปย์ที่ 'สำรองจ่าย' ไปก่อน!
                                     </p>
                                     <input 
                                         type="text" 
@@ -332,7 +370,7 @@
                             </div>
                         </div>
 
-                        {/* Rate Settings (Real-time) */}
+                        {/* Rate Settings */}
                         <div className="p-4 bg-slate-50 border-b border-slate-100 flex flex-col sm:flex-row gap-4 items-center justify-between">
                             <div className="flex items-center gap-2 w-full sm:w-auto">
                                 <select 
@@ -351,25 +389,13 @@
                                     <option value="TWD">TWD (ไต้หวัน)</option>
                                     <option value="THB">THB (ไทย)</option>
                                 </select>
-                                <button 
-                                    onClick={fetchRate}
-                                    disabled={isFetchingRate}
-                                    className="text-indigo-500 hover:text-indigo-700 p-2 rounded-full hover:bg-indigo-50 transition active:scale-95 disabled:opacity-50"
-                                    title="ดึงเรทล่าสุด"
-                                >
+                                <button onClick={fetchRate} disabled={isFetchingRate} className="text-indigo-500 hover:text-indigo-700 p-2 rounded-full hover:bg-indigo-50 transition active:scale-95 disabled:opacity-50" title="ดึงเรทล่าสุด">
                                     <Icons.Refresh className={`w-5 h-5 ${isFetchingRate ? 'animate-spin' : ''}`} />
                                 </button>
                             </div>
-                            
                             <div className="flex items-center gap-2 bg-white px-3 py-2 rounded-lg border border-slate-200 shadow-sm w-full sm:w-auto">
                                 <span className="text-sm font-medium text-slate-400 whitespace-nowrap">เรทเงิน (บาท):</span>
-                                <input 
-                                type="number" 
-                                value={currencyRate}
-                                onChange={(e) => setCurrencyRate(parseFloat(e.target.value) || 1)}
-                                className="w-full sm:w-24 text-right font-bold text-slate-700 outline-none border-b border-dashed border-slate-300 focus:border-indigo-400 bg-transparent"
-                                placeholder="1.0"
-                                />
+                                <input type="number" value={currencyRate} onChange={(e) => setCurrencyRate(parseFloat(e.target.value) || 1)} className="w-full sm:w-24 text-right font-bold text-slate-700 outline-none border-b border-dashed border-slate-300 focus:border-indigo-400 bg-transparent" placeholder="1.0" />
                             </div>
                         </div>
 
@@ -379,54 +405,51 @@
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div className="md:col-span-1">
                                         <label className="block text-xs font-bold text-slate-400 mb-1 uppercase tracking-wide">วันที่</label>
-                                        <input
-                                            type="date"
-                                            value={newItemDate}
-                                            onChange={(e) => setNewItemDate(e.target.value)}
-                                            className="w-full px-4 py-3 md:py-2 rounded-xl border border-slate-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 outline-none transition text-slate-600 bg-white"
-                                        />
+                                        <input type="date" value={newItemDate} onChange={(e) => setNewItemDate(e.target.value)} className="w-full px-4 py-3 md:py-2 rounded-xl border border-slate-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 outline-none transition text-slate-600 bg-white" />
                                     </div>
                                     <div className="md:col-span-1">
                                         <label className="block text-xs font-bold text-slate-400 mb-1 uppercase tracking-wide">ชื่อรายการ</label>
-                                        <input
-                                        type="text"
-                                        placeholder="เช่น ค่าตั๋วรถไฟ"
-                                        value={newItemName}
-                                        onChange={(e) => setNewItemName(e.target.value)}
-                                        className="w-full px-4 py-3 md:py-2 rounded-xl border border-slate-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 outline-none transition text-slate-600 bg-white"
-                                        />
+                                        <input type="text" placeholder="เช่น ค่าตั๋วรถไฟ" value={newItemName} onChange={(e) => setNewItemName(e.target.value)} className="w-full px-4 py-3 md:py-2 rounded-xl border border-slate-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 outline-none transition text-slate-600 bg-white" />
                                     </div>
                                     <div className="md:col-span-1">
                                         <label className="block text-xs font-bold text-slate-400 mb-1 uppercase tracking-wide">ยอดเงิน ({baseCurrency})</label>
-                                        <input
-                                        type="number"
-                                        placeholder="0.00"
-                                        value={newItemAmount}
-                                        onChange={(e) => setNewItemAmount(e.target.value)}
-                                        className="w-full px-4 py-3 md:py-2 rounded-xl border border-slate-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 outline-none transition text-slate-600 bg-white"
-                                        />
+                                        <input type="number" placeholder="0.00" value={newItemAmount} onChange={(e) => setNewItemAmount(e.target.value)} className="w-full px-4 py-3 md:py-2 rounded-xl border border-slate-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 outline-none transition text-slate-600 bg-white" />
                                     </div>
                                 </div>
 
-                                {/* Multi-select Assignee */}
+                                {/* Categories moved here */}
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-400 mb-3 uppercase tracking-wide">หมวดหมู่</label>
+                                    <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2"> {/* Negative margin to allow shadow scroll */}
+                                        {Object.values(CATEGORIES).map(cat => {
+                                            const isSelected = newItemCategory === cat.id;
+                                            return (
+                                                <button 
+                                                    key={cat.id} 
+                                                    type="button" 
+                                                    onClick={() => setNewItemCategory(cat.id)}
+                                                    className={`
+                                                        flex flex-col items-center justify-center gap-1.5 p-2 rounded-2xl border transition-all duration-200 active:scale-95 min-w-[70px]
+                                                        ${isSelected 
+                                                            ? `${cat.color} border-transparent ring-2 ring-offset-1 ring-white shadow-md` 
+                                                            : 'bg-white border-slate-100 text-slate-400 hover:bg-slate-50 hover:border-slate-200'}
+                                                    `}
+                                                >
+                                                    <span className={`text-lg ${isSelected ? 'scale-110' : 'grayscale opacity-70'} transition-transform duration-200`}>{cat.icon}</span>
+                                                    <span className="text-[10px] font-semibold">{cat.label}</span>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+
+                                {/* Assignee Section */}
                                 <div>
                                     <div className="flex justify-between items-center mb-2">
                                         <div className="flex items-center gap-2">
                                             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wide">หารกับใครบ้าง</label>
-                                            <button 
-                                                type="button" 
-                                                onClick={() => {
-                                                    setIsDeleteMode(!isDeleteMode);
-                                                    setIsAddingPerson(false);
-                                                }}
-                                                className={`text-[10px] px-2 py-1 rounded-full transition active:scale-95 flex items-center gap-1 ${
-                                                    isDeleteMode 
-                                                        ? 'bg-red-100 text-red-600 hover:bg-red-200' 
-                                                        : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
-                                                }`}
-                                            >
-                                                <Icons.Settings className="w-3 h-3" />
-                                                <span>{isDeleteMode ? 'เสร็จสิ้น' : 'แก้ไขสมาชิก'}</span>
+                                            <button type="button" onClick={() => { setIsDeleteMode(!isDeleteMode); setIsAddingPerson(false); }} className={`text-[10px] px-2 py-1 rounded-full transition active:scale-95 flex items-center gap-1 ${isDeleteMode ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}>
+                                                <Icons.Settings className="w-3 h-3" /> <span>{isDeleteMode ? 'เสร็จสิ้น' : 'แก้ไขสมาชิก'}</span>
                                             </button>
                                         </div>
                                         <button type="button" onClick={selectAllAssignees} className="text-[10px] text-indigo-500 hover:text-indigo-700 font-medium p-1">เลือกทุกคน</button>
@@ -438,270 +461,143 @@
                                             return (
                                                 <div key={p.id} className="relative group">
                                                     <label className="cursor-pointer relative">
-                                                        <input 
-                                                            type="checkbox" 
-                                                            className="person-checkbox sr-only"
-                                                            checked={isSelected}
-                                                            onChange={() => toggleAssignee(p.id)}
-                                                            disabled={isDeleteMode}
-                                                        />
-                                                        <div className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 border active:scale-95 
-                                                            ${p.isMe 
-                                                                ? 'border-rose-500 text-rose-500 font-bold' 
-                                                                : 'border-slate-200'}
-                                                            ${isSelected && !p.isMe
-                                                                ? '' 
-                                                                : p.isMe 
-                                                                    ? isSelected ? 'bg-rose-50 text-rose-600' : 'bg-white text-rose-500'
-                                                                    : 'bg-white text-slate-500 hover:border-indigo-200 hover:text-indigo-500'
-                                                            }
-                                                            ${!p.isMe && isSelected ? 'bg-e0e7ff border-6366f1 text-4338ca' : ''}
-                                                            ${isDeleteMode && !p.isMe ? 'opacity-70 shake-animation' : ''}
-                                                            `}
-                                                        >
-                                                            {p.isMe ? <Icons.User className="w-3 h-3" /> : <Icons.Users className="w-3 h-3" />}
-                                                            {p.name}
+                                                        <input type="checkbox" className="person-checkbox sr-only" checked={isSelected} onChange={() => toggleAssignee(p.id)} disabled={isDeleteMode} />
+                                                        <div className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 border active:scale-95 ${p.isMe ? 'border-rose-500 text-rose-500 font-bold' : 'border-slate-200'} ${isSelected && !p.isMe ? '' : p.isMe ? isSelected ? 'bg-rose-50 text-rose-600' : 'bg-white text-rose-500' : 'bg-white text-slate-500 hover:border-indigo-200 hover:text-indigo-500'} ${!p.isMe && isSelected ? 'bg-e0e7ff border-6366f1 text-4338ca' : ''} ${isDeleteMode && !p.isMe ? 'opacity-70 shake-animation' : ''}`}>
+                                                            {p.isMe ? <Icons.User className="w-3 h-3" /> : <Icons.Users className="w-3 h-3" />} {p.name}
                                                             {isSelected && <span className={`check-icon hidden ${p.isMe ? 'text-rose-500' : 'text-indigo-500'}`}><Icons.Check className="w-3 h-3"/></span>}
                                                         </div>
                                                     </label>
-                                                    
-                                                    {/* Delete Button Badge */}
                                                     {isDeleteMode && !p.isMe && (
-                                                        <button 
-                                                            onClick={(e) => {
-                                                                e.preventDefault();
-                                                                e.stopPropagation();
-                                                                handleRemovePerson(p.id);
-                                                            }}
-                                                            className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5 shadow-md hover:bg-red-600 z-10"
-                                                        >
-                                                            <Icons.X className="w-3 h-3" />
-                                                        </button>
+                                                        <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleRemovePerson(p.id); }} className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5 shadow-md hover:bg-red-600 z-10"><Icons.X className="w-3 h-3" /></button>
                                                     )}
                                                 </div>
                                             )
                                         })}
-
-                                        {/* Inline Add Button */}
                                         {isAddingPerson ? (
                                             <div className="flex items-center gap-1">
-                                                <input 
-                                                    ref={inputRef}
-                                                    value={newPersonName}
-                                                    onChange={e => setNewPersonName(e.target.value)}
-                                                    onKeyDown={(e) => {
-                                                        if (e.key === 'Enter') {
-                                                            handleAddPerson(e);
-                                                        }
-                                                    }}
-                                                    onBlur={() => {
-                                                        setTimeout(() => {
-                                                            if(!newPersonName) setIsAddingPerson(false);
-                                                        }, 150);
-                                                    }}
-                                                    placeholder="ชื่อ..."
-                                                    className="px-4 py-2 rounded-full text-sm border border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-200 w-24"
-                                                />
-                                                <button 
-                                                    type="button"
-                                                    onClick={handleAddPerson}
-                                                    className="bg-emerald-500 hover:bg-emerald-600 text-white p-2 rounded-full shadow-sm transition active:scale-95 flex items-center justify-center"
-                                                >
-                                                    <Icons.Check className="w-4 h-4" />
-                                                </button>
+                                                <input ref={inputRef} value={newPersonName} onChange={e => setNewPersonName(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') handleAddPerson(e); }} onBlur={() => setTimeout(() => !newPersonName && setIsAddingPerson(false), 150)} placeholder="ชื่อ..." className="px-4 py-2 rounded-full text-sm border border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-200 w-24" />
+                                                <button type="button" onClick={handleAddPerson} className="bg-emerald-500 hover:bg-emerald-600 text-white p-2 rounded-full shadow-sm transition active:scale-95 flex items-center justify-center"><Icons.Check className="w-4 h-4" /></button>
                                             </div>
-                                        ) : (
-                                            !isDeleteMode && (
-                                                <button 
-                                                    type="button"
-                                                    onClick={() => setIsAddingPerson(true)}
-                                                    className="px-3 py-2 rounded-full text-sm font-medium transition-all flex items-center justify-center gap-1 border border-dashed border-slate-300 text-slate-400 hover:text-indigo-500 hover:border-indigo-300 active:scale-95"
-                                                >
-                                                    <Icons.Plus className="w-4 h-4" />
-                                                </button>
-                                            )
-                                        )}
+                                        ) : !isDeleteMode && <button type="button" onClick={() => setIsAddingPerson(true)} className="px-3 py-2 rounded-full text-sm font-medium transition-all flex items-center justify-center gap-1 border border-dashed border-slate-300 text-slate-400 hover:text-indigo-500 hover:border-indigo-300 active:scale-95"><Icons.Plus className="w-4 h-4" /></button>}
                                     </div>
                                 </div>
 
-                                <button
-                                type="submit"
-                                className="w-full bg-slate-800 text-white px-6 py-3.5 rounded-xl font-medium hover:bg-slate-900 transition flex items-center justify-center gap-2 shadow-lg shadow-slate-200 active:scale-95"
-                                >
-                                <Icons.Plus className="w-4 h-4" />
-                                เพิ่มรายการ
+                                <button type="submit" className="w-full bg-slate-800 text-white px-6 py-3.5 rounded-xl font-medium hover:bg-slate-900 transition flex items-center justify-center gap-2 shadow-lg shadow-slate-200 active:scale-95">
+                                    <Icons.Plus className="w-4 h-4" /> เพิ่มรายการ
                                 </button>
                             </form>
                         </div>
 
-                        {/* Item List */}
-                        <div className="bg-slate-50 max-h-80 overflow-y-auto p-4 space-y-2">
-                            {items.length === 0 && <div className="text-center py-12 text-slate-300">ยังไม่มีรายการ</div>}
-                            
-                            {/* Sort by date desc (newest first) */}
-                            {[...items].sort((a,b) => new Date(b.date) - new Date(a.date)).map((item) => (
-                                <div key={item.id} className="bg-white p-3 rounded-xl border border-slate-100 flex items-center justify-between group hover:shadow-md transition hover:border-indigo-100 active:border-indigo-200">
-                                <div className="flex items-center gap-3 overflow-hidden">
-                                    <div className={`shrink-0 w-2 h-10 rounded-full ${
-                                        item.assignedTo.length === people.length ? 'bg-indigo-300' : 
-                                        item.assignedTo.length === 1 && item.assignedTo[0] === 'me' ? 'bg-emerald-300' : 'bg-purple-300'
-                                    }`}></div>
-                                    <div className="min-w-0">
-                                        <h3 className="font-medium text-slate-700 truncate">{item.name}</h3>
-                                        <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
-                                            <span className="flex items-center gap-1 bg-slate-50 px-2 py-0.5 rounded-md"><Icons.Calendar className="w-3 h-3"/> {formatDate(item.date)}</span>
-                                            <span className="truncate">{getAssigneeText(item.assignedTo)}</span>
+                        {/* List & Analytics Tab */}
+                        <div className="bg-slate-50">
+                            {/* Analytics (Pie Chart) */}
+                            {items.length > 0 && <div className="border-b border-slate-100 bg-white pt-2"><PieChart data={categoryData} /></div>}
+
+                            {/* Item List */}
+                            <div className="max-h-80 overflow-y-auto p-4 space-y-2">
+                                {items.length === 0 && <div className="text-center py-12 text-slate-300">ยังไม่มีรายการ</div>}
+                                {[...items].sort((a,b) => new Date(b.date) - new Date(a.date)).map((item) => (
+                                    <div key={item.id} className="bg-white p-3 rounded-xl border border-slate-100 flex items-center justify-between group hover:shadow-md transition hover:border-indigo-100 active:border-indigo-200">
+                                        <div className="flex items-center gap-3 overflow-hidden">
+                                            <div className="shrink-0 text-lg opacity-80">{CATEGORIES[item.category].icon}</div>
+                                            <div className="min-w-0">
+                                                <h3 className="font-medium text-slate-700 truncate">{item.name}</h3>
+                                                <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
+                                                    <span className="flex items-center gap-1 bg-slate-50 px-2 py-0.5 rounded-md"><Icons.Calendar className="w-3 h-3"/> {formatDate(item.date)}</span>
+                                                    <span className="truncate">{getAssigneeText(item.assignedTo)}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-3 shrink-0">
+                                            <div className="text-right">
+                                                <span className="block font-mono font-semibold text-slate-600">{item.amount.toLocaleString()}</span>
+                                                <span className="text-[10px] text-slate-400">{baseCurrency}</span>
+                                            </div>
+                                            <button onClick={() => handleDeleteItem(item.id)} className="text-slate-300 hover:text-red-400 p-2 -mr-2 transition active:scale-95"><Icons.Trash2 className="w-4 h-4" /></button>
                                         </div>
                                     </div>
-                                </div>
-                                <div className="flex items-center gap-3 shrink-0">
-                                    <div className="text-right">
-                                    <span className="block font-mono font-semibold text-slate-600">
-                                        {item.amount.toLocaleString()} 
-                                    </span>
-                                    <span className="text-[10px] text-slate-400">{baseCurrency}</span>
-                                    </div>
-                                    <button onClick={() => handleDeleteItem(item.id)} className="text-slate-300 hover:text-red-400 p-2 -mr-2 transition active:scale-95">
-                                    <Icons.Trash2 className="w-4 h-4" />
-                                    </button>
-                                </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
 
                         {/* Summary Dashboard */}
                         <div className="bg-slate-800 text-white p-6">
                             <div className="flex justify-between items-center mb-4 border-b border-slate-700 pb-4">
-                                <div>
-                                <p className="text-slate-400 text-xs uppercase tracking-wider">ยอดสำรองจ่ายทั้งหมด (เราจ่าย)</p>
-                                <p className="text-2xl font-bold text-white">
-                                    {(totalTripForeign * currencyRate).toLocaleString(undefined, {maximumFractionDigits:0})} <span className="text-sm font-normal text-slate-500">THB</span>
-                                </p>
-                                </div>
-                                <div className="text-right">
-                                <p className="text-slate-400 text-xs uppercase tracking-wider">ยอดกองกลาง</p>
-                                <p className="text-lg font-medium text-indigo-300">
-                                    {(totalSharedForeign * currencyRate).toLocaleString(undefined, {maximumFractionDigits:0})} THB
-                                </p>
-                                </div>
+                                <div><p className="text-slate-400 text-xs uppercase tracking-wider">ยอดสำรองจ่ายทั้งหมด (เราจ่าย)</p><p className="text-2xl font-bold text-white">{(totalTripForeign * currencyRate).toLocaleString(undefined, {maximumFractionDigits:0})} <span className="text-sm font-normal text-slate-500">THB</span></p></div>
+                                <div className="text-right"><p className="text-slate-400 text-xs uppercase tracking-wider">ยอดกองกลาง</p><p className="text-lg font-medium text-indigo-300">{(totalSharedForeign * currencyRate).toLocaleString(undefined, {maximumFractionDigits:0})} THB</p></div>
                             </div>
-
                             <h3 className="text-sm font-bold text-slate-300 mb-3 uppercase tracking-wider">ใครต้องคืนเงินเราบ้าง?</h3>
                             <div className="grid gap-3 mb-6">
                                 {people.filter(p => !p.isMe).map(person => {
-                                const debt = calculatePersonDebt(person.id);
-                                return (
-                                    <div key={person.id} className="bg-white/5 p-3 rounded-xl flex justify-between items-center border border-white/5">
-                                    <div className="flex items-center gap-2">
-                                        <div className={`w-3 h-3 rounded-full ${getPersonColor(person.id)}`}></div>
-                                        <span className="font-medium text-slate-200">{person.name}</span>
-                                    </div>
-                                    <div className="text-right">
-                                        <span className="text-xl font-bold text-emerald-400">{debt.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</span>
-                                        <span className="text-xs text-slate-500 ml-1">THB</span>
-                                    </div>
-                                    </div>
-                                );
+                                    const debt = calculatePersonDebt(person.id);
+                                    return (
+                                        <div key={person.id} className="bg-white/5 p-3 rounded-xl flex justify-between items-center border border-white/5">
+                                            <div className="flex items-center gap-2"><div className={`w-3 h-3 rounded-full ${getPersonColor(person.id)}`}></div><span className="font-medium text-slate-200">{person.name}</span></div>
+                                            <div className="text-right"><span className="text-xl font-bold text-emerald-400">{debt.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</span><span className="text-xs text-slate-500 ml-1">THB</span></div>
+                                        </div>
+                                    );
                                 })}
-                                {people.filter(p => !p.isMe).length === 0 && (
-                                <div className="text-center text-slate-500 text-sm py-2">เพิ่มสมาชิกเพื่อเริ่มคำนวณ</div>
-                                )}
+                                {people.filter(p => !p.isMe).length === 0 && <div className="text-center text-slate-500 text-sm py-2">เพิ่มสมาชิกเพื่อเริ่มคำนวณ</div>}
                             </div>
-
-                             {/* MOVED BUTTON HERE */}
-                             <button 
-                                onClick={() => setShowSlip(true)}
-                                className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition shadow-lg shadow-indigo-900/30 active:scale-95"
-                            >
-                                <Icons.Receipt className="w-5 h-5" />
-                                ดูสลิปสรุปยอด
-                            </button>
+                            <button onClick={() => setShowSlip(true)} className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition shadow-lg shadow-indigo-900/30 active:scale-95"><Icons.Receipt className="w-5 h-5" /> ดูสลิปสรุปยอด</button>
                         </div>
                     </div>
                     
-                    <div className="text-center mt-6 text-slate-400 text-sm">
-                        <p>Trip Splitter By ONOURWAY</p>
-                    </div>
+                    <div className="text-center mt-6 text-slate-400 text-sm pb-8"><p>Universal Trip Splitter</p></div>
 
                     {/* SLIP MODAL */}
                     {showSlip && (
                         <div className="fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm overflow-hidden">
-                        <div className="bg-white w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl relative flex flex-col max-h-[90vh]">
-                            <div className="p-4 border-b border-slate-100 flex justify-between items-center">
-                                <h3 className="font-bold text-slate-700">สลิปสรุปยอด</h3>
-                                <button onClick={() => setShowSlip(false)} className="text-slate-400 hover:text-slate-600 p-1">
-                                    <Icons.X className="w-6 h-6" />
-                                </button>
-                            </div>
-
-                            <div ref={slipRef} className="bg-white p-6 overflow-y-auto no-scrollbar">
-                            <div className="text-center border-b border-slate-100 pb-6 mb-6">
-                                <div className="flex justify-center mb-3">
-                                <div className="bg-indigo-50 p-3 rounded-full"><Icons.Receipt className="w-8 h-8 text-indigo-500" /></div>
+                            <div className="bg-white w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl relative flex flex-col max-h-[90vh]">
+                                <div className="p-4 border-b border-slate-100 flex justify-between items-center">
+                                    <h3 className="font-bold text-slate-700">สลิปสรุปยอด</h3>
+                                    <button onClick={() => setShowSlip(false)} className="text-slate-400 hover:text-slate-600 p-1"><Icons.X className="w-6 h-6" /></button>
                                 </div>
-                                <h2 className="text-xl font-bold text-slate-800 uppercase tracking-wide">Expense Summary</h2>
-                                <p className="text-sm text-slate-500 mt-1">{tripName}</p>
-                                <div className="flex flex-col items-center gap-1 mt-2">
-                                    <span className="text-xs bg-slate-50 px-2 py-1 rounded text-slate-500 font-medium">เรท: {currencyRate} THB/{baseCurrency}</span>
-                                    <span className="text-[10px] text-slate-400">วันที่: {new Date().toLocaleDateString('th-TH')}</span>
-                                </div>
-                            </div>
-
-                            {/* Itemized List with Dots & Grouping */}
-                            <div className="mb-6 bg-slate-50 rounded-xl p-4">
-                                <h3 className="text-xs font-bold text-slate-400 uppercase mb-3 tracking-wider">รายละเอียดรายการ</h3>
-                                <div className="space-y-2">
-                                    {getGroupedItemsForSlip().length === 0 ? (
-                                        <p className="text-xs text-center text-slate-400 italic">ยังไม่มีรายการกองกลาง</p>
-                                    ) : (
-                                        getGroupedItemsForSlip().map((group, idx) => (
-                                            <div key={idx} className="flex items-center justify-between text-xs border-b border-slate-100 pb-2 last:border-0 last:pb-0 gap-3">
-                                                <div className="flex items-center gap-2 min-w-0 flex-1">
-                                                    <span className="font-medium text-slate-600 truncate">{group.displayName}</span>
-                                                    {group.count > 1 && <span className="text-[10px] bg-slate-200 text-slate-500 px-1.5 rounded-full whitespace-nowrap">x{group.count}</span>}
-                                                    {/* Dots */}
-                                                    <div className="flex -space-x-1 shrink-0">
-                                                        {group.assignedTo.map(pid => (
-                                                            <div key={pid} className={`w-2.5 h-2.5 rounded-full border border-white ${getPersonColor(pid)}`} title={people.find(p=>p.id===pid)?.name}></div>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                                <span className="font-mono text-slate-500 font-medium whitespace-nowrap shrink-0">{(group.totalAmount * currencyRate).toLocaleString()}</span>
-                                            </div>
-                                        ))
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* Debt Breakdown (Amount Due) */}
-                            <div className="mb-6">
-                                <h3 className="text-xs font-bold text-slate-400 uppercase mb-3 tracking-wider">ยอดที่ต้องคืน (ให้ {people.find(p=>p.isMe)?.name})</h3>
-                                <div className="space-y-2">
-                                    {people.filter(p => !p.isMe).map(person => (
-                                    <div key={person.id} className="flex justify-between items-center bg-indigo-50 p-3 rounded-lg border border-indigo-100">
-                                        <div className="flex items-center gap-2">
-                                            <div className={`w-3 h-3 rounded-full ${getPersonColor(person.id)}`}></div>
-                                            <span className="font-medium text-slate-700">{person.name}</span>
+                                <div ref={slipRef} className="bg-white p-6 overflow-y-auto no-scrollbar">
+                                    <div className="text-center border-b border-slate-100 pb-6 mb-6">
+                                        <div className="flex justify-center mb-3"><div className="bg-indigo-50 p-3 rounded-full"><Icons.Receipt className="w-8 h-8 text-indigo-500" /></div></div>
+                                        <h2 className="text-xl font-bold text-slate-800 uppercase tracking-wide">Expense Summary</h2>
+                                        <p className="text-sm text-slate-500 mt-1">{tripName}</p>
+                                        <div className="flex flex-col items-center gap-1 mt-2">
+                                            <span className="text-xs bg-slate-50 px-2 py-1 rounded text-slate-500 font-medium">เรท: {currencyRate} THB/{baseCurrency}</span>
+                                            <span className="text-[10px] text-slate-400">วันที่: {new Date().toLocaleDateString('th-TH')}</span>
                                         </div>
-                                        <span className="font-bold text-lg text-indigo-600">
-                                        {calculatePersonDebt(person.id).toLocaleString(undefined, {maximumFractionDigits:0})} <span className="text-xs font-normal text-slate-400">THB</span>
-                                        </span>
                                     </div>
-                                    ))}
+                                    <div className="mb-6 bg-slate-50 rounded-xl p-4">
+                                        <h3 className="text-xs font-bold text-slate-400 uppercase mb-3 tracking-wider">รายละเอียดรายการ</h3>
+                                        <div className="space-y-2">
+                                            {getGroupedItemsForSlip().length === 0 ? <p className="text-xs text-center text-slate-400 italic">ยังไม่มีรายการกองกลาง</p> : getGroupedItemsForSlip().map((group, idx) => (
+                                                <div key={idx} className="flex items-center justify-between text-xs border-b border-slate-100 pb-2 last:border-0 last:pb-0 gap-3">
+                                                    <div className="flex items-center gap-2 min-w-0 flex-1">
+                                                        <span className="font-medium text-slate-600 truncate">{group.displayName}</span>
+                                                        {group.count > 1 && <span className="text-[10px] bg-slate-200 text-slate-500 px-1.5 rounded-full whitespace-nowrap">x{group.count}</span>}
+                                                        <div className="flex -space-x-1 shrink-0">{group.assignedTo.map(pid => (<div key={pid} className={`w-2.5 h-2.5 rounded-full border border-white ${getPersonColor(pid)}`}></div>))}</div>
+                                                    </div>
+                                                    <span className="font-mono text-slate-500 font-medium whitespace-nowrap shrink-0">{(group.totalAmount * currencyRate).toLocaleString()}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="mb-6">
+                                        <h3 className="text-xs font-bold text-slate-400 uppercase mb-3 tracking-wider">ยอดที่ต้องคืน (ให้ {people.find(p=>p.isMe)?.name})</h3>
+                                        <div className="space-y-2">
+                                            {people.filter(p => !p.isMe).map(person => (
+                                                <div key={person.id} className="flex justify-between items-center bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                                                    <div className="flex items-center gap-2"><div className={`w-3 h-3 rounded-full ${getPersonColor(person.id)}`}></div><span className="font-medium text-slate-700">{person.name}</span></div>
+                                                    <span className="font-bold text-lg text-indigo-600">{calculatePersonDebt(person.id).toLocaleString(undefined, {maximumFractionDigits:0})} <span className="text-xs font-normal text-slate-400">THB</span></span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="text-center text-xs text-slate-500 border-t border-slate-100 pt-4">
+                                        <span className="block mb-1 uppercase tracking-wider">รวมยอดกองกลาง</span>
+                                        <span className="font-mono font-bold text-xl text-indigo-500">{(totalSharedForeign * currencyRate).toLocaleString()} <span className="text-sm font-normal text-slate-400">THB</span></span>
+                                    </div>
+                                </div>
+                                <div className="p-4 bg-slate-50 border-t border-slate-100 flex gap-3">
+                                    <button onClick={handleCopyText} className="flex-1 bg-white hover:bg-slate-50 text-indigo-600 border border-indigo-200 font-medium py-3 rounded-xl flex items-center justify-center gap-2 transition active:scale-95"><Icons.Copy className="w-4 h-4" /> คัดลอกข้อความ</button>
                                 </div>
                             </div>
-
-                            {/* Footer / Shared Pool Total */}
-                            <div className="text-center text-xs text-slate-500 border-t border-slate-100 pt-4">
-                                <span className="block mb-1 uppercase tracking-wider">รวมยอดกองกลาง</span>
-                                <span className="font-mono font-bold text-xl text-indigo-500">{(totalSharedForeign * currencyRate).toLocaleString()} <span className="text-sm font-normal text-slate-400">THB</span></span>
-                            </div>
-                            
-                            <div className="text-center mt-6">
-                                <p className="text-[10px] text-slate-300 uppercase tracking-widest">Trip Splitter By ONOURWAY</p>
-                            </div>
-                            </div>
-                        </div>
                         </div>
                     )}
                 </div>
@@ -713,5 +609,3 @@
     </script>
 </body>
 </html>
-
-
