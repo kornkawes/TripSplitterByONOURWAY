@@ -396,7 +396,7 @@
                                 </button>
                             </div>
                             <div className="flex items-center gap-2 bg-white px-3 py-2 rounded-lg border border-slate-200 shadow-sm w-full sm:w-auto">
-                                <span className="text-sm font-medium text-slate-400 whitespace-nowrap">เรทเงิน (บาท):</span>
+                                <span className="text-sm font-medium text-slate-400 whitespace-nowrap">อัตราแลกเปลี่ยน:</span>
                                 <input type="number" value={currencyRate} onChange={(e) => setCurrencyRate(parseFloat(e.target.value) || 1)} className="w-full sm:w-24 text-right font-bold text-slate-700 outline-none border-b border-dashed border-slate-300 focus:border-indigo-400 bg-transparent" placeholder="1.0" />
                             </div>
                         </div>
@@ -630,5 +630,6 @@
     </script>
 </body>
 </html>
+
 
 
