@@ -260,7 +260,7 @@
                 text += `📅 วันที่: ${new Date().toLocaleDateString('th-TH')}\n`;
                 text += `💸 ยอดกองกลางรวม: ${(totalSharedForeign * currencyRate).toLocaleString(undefined, {maximumFractionDigits:0})} THB\n`;
                 text += `------------------\n`;
-                text += `ยอดที่ต้องคืนให้ฉัน:\n`; // Simplified text here too
+                text += `ยอดที่ต้องคืน:\n`; // Simplified text here too
                 people.filter(p => !p.isMe).forEach(p => {
                     const debt = calculatePersonDebt(p.id);
                     text += `👤 ${p.name}: ${debt.toLocaleString(undefined, {maximumFractionDigits:0})} THB\n`;
@@ -600,7 +600,7 @@
                                     </div>
 
                                     <div className="mb-6">
-                                        <h3 className="text-xs font-bold text-slate-400 uppercase mb-3 tracking-wider">ยอดที่ต้องคืนให้ฉัน</h3>
+                                        <h3 className="text-xs font-bold text-slate-400 uppercase mb-3 tracking-wider">ยอดที่ต้องคืน</h3>
                                         <div className="space-y-2">
                                             {people.filter(p => !p.isMe).map(person => (
                                                 <div key={person.id} className="flex justify-between items-center bg-indigo-50 p-3 rounded-lg border border-indigo-100">
@@ -630,3 +630,4 @@
     </script>
 </body>
 </html>
+
