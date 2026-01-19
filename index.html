@@ -58,9 +58,6 @@
             100% { transform: rotate(0deg); }
         }
         .shake-animation { animation: shake 0.3s infinite; }
-
-        /* Safe area padding */
-        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-700 pb-safe">
@@ -75,6 +72,7 @@
             Plus: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M5 12h14"/><path d="M12 5v14"/></svg>,
             Trash2: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>,
             Receipt: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17V7"/></svg>,
+            Download: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>,
             X: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>,
             Globe: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>,
             Settings: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.47a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.39a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>,
@@ -86,7 +84,8 @@
             Copy: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>,
             PieChart: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>,
             Trash: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>,
-            Share: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" x2="12" y1="2" y2="15"/></svg>
+            Wallet: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>,
+            ArrowRight: (props) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         };
 
         // --- COLORS & CATEGORIES ---
@@ -143,6 +142,7 @@
             const [newItemDate, setNewItemDate] = useState(new Date().toISOString().split('T')[0]);
             const [newItemCategory, setNewItemCategory] = useState('food');
             const [selectedAssignees, setSelectedAssignees] = useState([]); 
+            const [paidBy, setPaidBy] = useState('');
 
             // UI State
             const [showSlip, setShowSlip] = useState(false);
@@ -150,9 +150,11 @@
             const inputRef = useRef(null);
 
             useEffect(() => {
-                // Initial select everyone
                 if (selectedAssignees.length === 0 && people.length > 0) {
                      setSelectedAssignees(people.map(p => p.id));
+                }
+                if (!paidBy && people.length > 0) {
+                    setPaidBy(people[0].id);
                 }
             }, [people]);
 
@@ -160,7 +162,7 @@
             const handleAddPerson = (e) => {
                 if (e) { e.preventDefault(); e.stopPropagation(); }
                 if (!newPersonName.trim()) return;
-                const newPerson = { id: `p${Date.now()}`, name: newPersonName.trim(), isMe: false };
+                const newPerson = { id: `p${Date.now()}`, name: newPersonName.trim() };
                 setPeople([...people, newPerson]);
                 setSelectedAssignees(prev => [...prev, newPerson.id]);
                 setNewPersonName('');
@@ -171,6 +173,7 @@
                 if (people.length <= 1) return;
                 setPeople(people.filter(p => p.id !== id));
                 setSelectedAssignees(prev => prev.filter(pid => pid !== id));
+                if (paidBy === id) setPaidBy(people.find(p => p.id !== id)?.id || '');
             };
 
             useEffect(() => { if (isAddingPerson && inputRef.current) inputRef.current.focus(); }, [isAddingPerson]);
@@ -191,12 +194,13 @@
 
             const handleAddItem = (e) => {
                 e.preventDefault();
-                if (!newItemName || !newItemAmount || selectedAssignees.length === 0) return;
+                if (!newItemName || !newItemAmount || selectedAssignees.length === 0 || !paidBy) return;
                 const newItem = {
                     id: Date.now(),
                     name: newItemName,
                     amount: parseFloat(newItemAmount),
                     assignedTo: [...selectedAssignees],
+                    paidBy: paidBy,
                     date: newItemDate,
                     category: newItemCategory
                 };
@@ -240,11 +244,69 @@
                 return debt * currencyRate;
             };
 
-            const totalTripForeign = items.reduce((sum, item) => sum + item.amount, 0);
-            const totalSharedForeign = items.filter(i => i.assignedTo.length > 1).reduce((sum, i) => sum + i.amount, 0);
+            const calculateDebts = () => {
+                const balances = {};
+                people.forEach(p => balances[p.id] = 0);
 
-            // Pie Chart Data Main View (All)
-            const categoryDataAll = useMemo(() => {
+                items.forEach(item => {
+                    const amountTHB = item.amount * currencyRate;
+                    const paidById = item.paidBy;
+                    const splitCount = item.assignedTo.length;
+                    const shareAmount = amountTHB / splitCount;
+
+                    if (balances[paidById] !== undefined) {
+                        balances[paidById] += amountTHB;
+                    }
+
+                    item.assignedTo.forEach(assigneeId => {
+                        if (balances[assigneeId] !== undefined) {
+                            balances[assigneeId] -= shareAmount;
+                        }
+                    });
+                });
+
+                const debtors = [];
+                const creditors = [];
+
+                Object.entries(balances).forEach(([id, amount]) => {
+                    const roundedAmount = Math.round(amount * 100) / 100;
+                    if (roundedAmount < -0.01) debtors.push({ id, amount: roundedAmount });
+                    else if (roundedAmount > 0.01) creditors.push({ id, amount: roundedAmount });
+                });
+
+                debtors.sort((a, b) => a.amount - b.amount);
+                creditors.sort((a, b) => b.amount - a.amount);
+
+                const transactions = [];
+                let i = 0;
+                let j = 0;
+
+                while (i < debtors.length && j < creditors.length) {
+                    const debtor = debtors[i];
+                    const creditor = creditors[j];
+                    const amount = Math.min(Math.abs(debtor.amount), creditor.amount);
+                    
+                    transactions.push({
+                        from: debtor.id,
+                        to: creditor.id,
+                        amount: amount
+                    });
+
+                    debtor.amount += amount;
+                    creditor.amount -= amount;
+
+                    if (Math.abs(debtor.amount) < 0.01) i++;
+                    if (creditor.amount < 0.01) j++;
+                }
+
+                return transactions;
+            };
+
+            const transactions = calculateDebts();
+            const totalTripForeign = items.reduce((sum, item) => sum + item.amount, 0);
+
+            // Pie Chart Data (All items)
+            const categoryData = useMemo(() => {
                 const data = {};
                 items.forEach(item => {
                     if (!data[item.category]) data[item.category] = 0;
@@ -261,88 +323,49 @@
             const handleCopyText = () => {
                 let text = `🧾 สรุปค่าใช้จ่ายทริป: ${tripName}\n`;
                 text += `📅 วันที่: ${new Date().toLocaleDateString('th-TH')}\n`;
-                text += `💸 รวมยอดแชร์ทั้งหมด: ${(totalSharedForeign * currencyRate).toLocaleString(undefined, {maximumFractionDigits:0})} THB\n`;
-                text += `------------------\n`;
-                text += `📝 รายการทั้งหมด:\n`;
+                text += `💸 ยอดรวมทั้งทริป: ${(totalTripForeign * currencyRate).toLocaleString(undefined, {maximumFractionDigits:0})} THB\n`;
                 
-                // Sort items by date, FILTER ONLY SHARED ITEMS
-                const sortedSharedItems = items
-                    .filter(i => i.assignedTo.length > 1)
-                    .sort((a,b) => new Date(a.date) - new Date(b.date));
-                
-                sortedSharedItems.forEach(item => {
-                    const date = new Date(item.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'numeric' });
-                    const assigneesText = item.assignedTo.map(id => people.find(p=>p.id===id)?.name).join(',');
-                    const thbAmount = Math.round(item.amount * currencyRate);
-
-                    // Check if base currency is THB to avoid redundancy
-                    if (baseCurrency === 'THB') {
-                         text += `${date} - ${item.name}: ${item.amount.toLocaleString()} THB (${assigneesText})\n`;
-                    } else {
-                         text += `${date} - ${item.name}: ${item.amount.toLocaleString()} ${baseCurrency} / ${thbAmount.toLocaleString()} THB (${assigneesText})\n`;
-                    }
+                text += `\n📦 แยกตามหมวดหมู่:\n`;
+                const groupedByCat = getGroupedItemsByCategory();
+                Object.entries(groupedByCat).forEach(([catId, items]) => {
+                     const total = items.reduce((sum, i) => sum + i.totalAmount, 0) * currencyRate;
+                     text += `${CATEGORIES[catId].icon} ${CATEGORIES[catId].label}: ${total.toLocaleString(undefined, {maximumFractionDigits:0})} THB\n`;
                 });
-                
-                if (sortedSharedItems.length === 0) {
-                    text += `- ไม่มีรายการกองกลาง -\n`;
+
+                text += `\n------------------\n`;
+                text += `💰 ใครต้องโอนให้ใคร:\n`; 
+                if (transactions.length === 0) {
+                    text += `✅ ไม่มีหนี้ค้างชำระ (เจ๊ากันหมดแล้ว)\n`;
+                } else {
+                    transactions.forEach(t => {
+                        const fromName = people.find(p => p.id === t.from)?.name;
+                        const toName = people.find(p => p.id === t.to)?.name;
+                        text += `💸 ${fromName} ➝ ${toName}: ${t.amount.toLocaleString(undefined, {maximumFractionDigits:0})} THB\n`;
+                    });
                 }
-
-                text += `------------------\n`;
-                text += `ยอดที่ต้องคืน:\n`;
-                people.filter(p => !p.isMe).forEach(p => {
-                    const debt = calculatePersonDebt(p.id);
-                    text += `👤 ${p.name}: ${debt.toLocaleString(undefined, {maximumFractionDigits:0})} THB\n`;
-                });
                 text += `------------------\n`;
                 text += `Calculated by Trip Splitter`;
 
-                // Legacy copy method
-                const textArea = document.createElement("textarea");
-                textArea.value = text;
-                textArea.style.position = "fixed";
-                textArea.style.left = "-9999px";
-                textArea.style.top = "0";
-                document.body.appendChild(textArea);
-                textArea.focus();
-                textArea.select();
-
-                try {
-                    const successful = document.execCommand('copy');
-                    if(successful) {
-                         alert("คัดลอกสรุปยอดและรายการกองกลางเรียบร้อย!");
-                    } else {
-                         alert("ไม่สามารถคัดลอกข้อความได้ (Browser not supported)");
-                    }
-                } catch (err) {
-                    console.error('Fallback copy failed', err);
-                    alert("เกิดข้อผิดพลาดในการคัดลอก: " + err);
-                }
-                
-                document.body.removeChild(textArea);
+                navigator.clipboard.writeText(text).then(() => alert("คัดลอกสรุปยอดเรียบร้อย!"));
             };
 
             // --- HELPERS ---
             const getAssigneeText = (assigneeIds) => {
                 if (assigneeIds.length === people.length) return "หารทุกคน";
-                if (assigneeIds.length === 1) {
-                    const person = people.find(p => p.id === assigneeIds[0]);
-                    return `ส่วนตัว: ${person ? person.name : 'Unknown'}`;
-                }
                 const names = assigneeIds.map(id => people.find(p => p.id === id)?.name).join(', ');
                 return `หารกัน: ${names}`;
             };
             const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '';
             const getPersonColor = (id) => PERSON_COLORS[people.findIndex(p => p.id === id) % PERSON_COLORS.length] || 'bg-gray-400';
 
-            // Generic Grouping Function
-            const getGroupedItems = (sourceItems) => {
+            const getGroupedItemsByCategory = () => {
                 const grouped = {};
-                sourceItems.forEach(item => {
+                items.forEach(item => {
                     if (!grouped[item.category]) grouped[item.category] = [];
-                    // Normalize for sub-grouping
                     const normalizedName = item.name.trim().toLowerCase();
                     const splitSignature = [...item.assignedTo].sort().join('|');
-                    const key = `${normalizedName}::${splitSignature}`;
+                    const payerSignature = item.paidBy;
+                    const key = `${normalizedName}::${splitSignature}::${payerSignature}`;
                     
                     const existing = grouped[item.category].find(g => g.key === key);
                     if (existing) {
@@ -353,40 +376,38 @@
                             key,
                             displayName: item.name.trim(),
                             assignedTo: item.assignedTo,
+                            paidBy: item.paidBy,
                             totalAmount: item.amount,
                             count: 1
                         });
                     }
                 });
-                return grouped; // { food: [...], transport: [...] }
+                return grouped; 
             };
 
-            // --- PIE CHART COMPONENT (FIXED GRADIENT) ---
+            // --- PIE CHART COMPONENT ---
             const PieChart = ({ data }) => {
                 if (!data || data.length === 0) return null;
-                
-                // Cumulative Percent Calculation for Gradient
                 let cumulativePercent = 0;
                 const conicSegments = data.map(d => {
                     const start = cumulativePercent;
                     const end = cumulativePercent + d.percent;
                     cumulativePercent = end;
-                    // Ensure we use the hex color for gradient
-                    return `${d.hex || '#64748b'} ${start}% ${end}%`; 
+                    return `${d.hex} ${start}% ${end}%`; 
                 }).join(', ');
 
                 return (
                     <div className="flex items-center gap-6 justify-center py-4">
-                        <div className="w-24 h-24 rounded-full relative shrink-0" style={{ background: `conic-gradient(${conicSegments})` }}>
-                            <div className="absolute inset-0 m-auto w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-inner">
-                                <span className="text-[10px] font-bold text-slate-400">Total</span>
+                        <div className="w-32 h-32 rounded-full relative shrink-0" style={{ background: `conic-gradient(${conicSegments})` }}>
+                            <div className="absolute inset-0 m-auto w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-inner">
+                                <span className="text-xs font-bold text-slate-400">Expenses</span>
                             </div>
                         </div>
                         <div className="space-y-1.5 text-[10px]">
                             {data.map((cat, i) => (
                                 <div key={i} className="flex items-center gap-2">
-                                    <div className={`w-2.5 h-2.5 rounded-full ${cat.color.split(' ')[1].replace('text-', 'bg-')}`}></div>
-                                    <span className="w-14 truncate text-slate-600">{cat.label}</span>
+                                    <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: cat.hex }}></div>
+                                    <span className="w-16 truncate text-slate-600">{cat.label}</span>
                                     <span className="font-mono font-medium text-slate-800">{cat.amount.toLocaleString(undefined, {maximumFractionDigits:0})}</span>
                                 </div>
                             ))}
@@ -394,26 +415,6 @@
                     </div>
                 );
             };
-
-            // Derived state for Slip - ALWAYS SHARED ITEMS ONLY
-            const slipItems = useMemo(() => {
-                return items.filter(i => i.assignedTo.length > 1);
-            }, [items]);
-
-            // Pie Chart Data for Modal (Shared Only)
-            const categoryDataSlip = useMemo(() => {
-                const data = {};
-                const totalFiltered = slipItems.reduce((sum, i) => sum + i.amount, 0);
-                slipItems.forEach(item => {
-                    if (!data[item.category]) data[item.category] = 0;
-                    data[item.category] += item.amount;
-                });
-                return Object.entries(data).map(([catId, amount]) => ({
-                    ...CATEGORIES[catId],
-                    amount: amount * currencyRate,
-                    percent: totalFiltered > 0 ? (amount / totalFiltered) * 100 : 0
-                })).sort((a,b) => b.amount - a.amount);
-            }, [slipItems, currencyRate]);
 
             return (
                 <div className="min-h-screen p-4 md:p-8 relative pb-24">
@@ -432,7 +433,7 @@
                                         Trip Splitter
                                     </h1>
                                     <p className="text-indigo-50 text-sm mt-1 font-light opacity-90">
-                                        เว็บคำนวนค่าใช้จ่ายรายวันกับเพื่อนสำหรับคนที่ 'สำรองจ่าย' ไปก่อน (หลังจากเปลี่ยนค่าเงินอย่าลืมกด🔄เพื่อดึงเรทล่าสุดนะ!)
+                                        สำหรับสายเปย์ที่ 'สำรองจ่าย' ไปก่อน!
                                     </p>
                                     <input 
                                         type="text" 
@@ -470,7 +471,13 @@
                             </div>
                             <div className="flex items-center gap-2 bg-white px-3 py-2 rounded-lg border border-slate-200 shadow-sm w-full sm:w-auto">
                                 <span className="text-sm font-medium text-slate-400 whitespace-nowrap">อัตราแลกเปลี่ยน:</span>
-                                <input type="number" value={currencyRate} onChange={(e) => setCurrencyRate(parseFloat(e.target.value) || 1)} className="w-full sm:w-24 text-right font-bold text-slate-700 outline-none border-b border-dashed border-slate-300 focus:border-indigo-400 bg-transparent" placeholder="1.0" />
+                                <input 
+                                    type="number" 
+                                    value={currencyRate} 
+                                    onChange={(e) => setCurrencyRate(parseFloat(e.target.value) || 1)} 
+                                    className="w-full sm:w-24 text-right font-bold text-slate-700 outline-none border-b border-dashed border-slate-300 focus:border-indigo-400 bg-transparent" 
+                                    placeholder="เช่น 4.8" 
+                                />
                             </div>
                         </div>
 
@@ -518,6 +525,27 @@
                                     </div>
                                 </div>
 
+                                {/* Payer Selection (NEW) */}
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wide">ใครจ่าย?</label>
+                                    <div className="flex flex-wrap gap-2">
+                                        {people.map(p => (
+                                            <button 
+                                                key={p.id}
+                                                type="button"
+                                                onClick={() => setPaidBy(p.id)}
+                                                className={`px-3 py-1 rounded-full text-xs font-medium border transition active:scale-95 flex items-center gap-1
+                                                    ${paidBy === p.id 
+                                                        ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm' 
+                                                        : 'bg-white text-slate-500 border-slate-200 hover:border-indigo-300'}`}
+                                            >
+                                                <Icons.Wallet className="w-3 h-3" />
+                                                {p.name}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
                                 {/* Assignee Section */}
                                 <div>
                                     <div className="flex justify-between items-center mb-2">
@@ -536,13 +564,23 @@
                                             return (
                                                 <div key={p.id} className="relative group">
                                                     <label className="cursor-pointer relative">
-                                                        <input type="checkbox" className="person-checkbox sr-only" checked={isSelected} onChange={() => toggleAssignee(p.id)} disabled={isDeleteMode} />
-                                                        <div className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 border active:scale-95 ${p.isMe ? 'border-rose-500 text-rose-500 font-bold' : 'border-slate-200'} ${isSelected && !p.isMe ? '' : p.isMe ? isSelected ? 'bg-rose-50 text-rose-600' : 'bg-white text-rose-500' : 'bg-white text-slate-500 hover:border-indigo-200 hover:text-indigo-500'} ${!p.isMe && isSelected ? 'bg-e0e7ff border-6366f1 text-4338ca' : ''} ${isDeleteMode && !p.isMe ? 'opacity-70 shake-animation' : ''}`}>
-                                                            {p.isMe ? <Icons.User className="w-3 h-3" /> : <Icons.Users className="w-3 h-3" />} {p.name}
-                                                            {isSelected && <span className={`check-icon hidden ${p.isMe ? 'text-rose-500' : 'text-indigo-500'}`}><Icons.Check className="w-3 h-3"/></span>}
+                                                        <input 
+                                                            type="checkbox" 
+                                                            className="person-checkbox sr-only"
+                                                            checked={isSelected}
+                                                            onChange={() => toggleAssignee(p.id)}
+                                                            disabled={isDeleteMode}
+                                                        />
+                                                        <div className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 border active:scale-95 
+                                                            ${isSelected ? 'bg-e0e7ff border-6366f1 text-4338ca' : 'bg-white text-slate-500 border-slate-200 hover:border-indigo-200 hover:text-indigo-500'} 
+                                                            ${isDeleteMode ? 'opacity-70 shake-animation' : ''}
+                                                            `}
+                                                        >
+                                                            <Icons.Users className="w-3 h-3" /> {p.name}
+                                                            {isSelected && <span className="check-icon hidden text-indigo-500"><Icons.Check className="w-3 h-3"/></span>}
                                                         </div>
                                                     </label>
-                                                    {isDeleteMode && !p.isMe && (
+                                                    {isDeleteMode && (
                                                         <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleRemovePerson(p.id); }} className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5 shadow-md hover:bg-red-600 z-10"><Icons.X className="w-3 h-3" /></button>
                                                     )}
                                                 </div>
@@ -550,10 +588,32 @@
                                         })}
                                         {isAddingPerson ? (
                                             <div className="flex items-center gap-1">
-                                                <input ref={inputRef} value={newPersonName} onChange={e => setNewPersonName(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') handleAddPerson(e); }} onBlur={() => setTimeout(() => !newPersonName && setIsAddingPerson(false), 150)} placeholder="ชื่อ..." className="px-4 py-2 rounded-full text-sm border border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-200 w-24" />
-                                                <button type="button" onClick={handleAddPerson} className="bg-emerald-500 hover:bg-emerald-600 text-white p-2 rounded-full shadow-sm transition active:scale-95 flex items-center justify-center"><Icons.Check className="w-4 h-4" /></button>
+                                                <input 
+                                                    ref={inputRef} 
+                                                    value={newPersonName} 
+                                                    onChange={e => setNewPersonName(e.target.value)} 
+                                                    onKeyDown={(e) => { if (e.key === 'Enter') handleAddPerson(e); }} 
+                                                    onBlur={() => setTimeout(() => !newPersonName && setIsAddingPerson(false), 150)} 
+                                                    placeholder="ชื่อ..." 
+                                                    className="px-4 py-2 rounded-full text-sm border border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-200 w-24" 
+                                                />
+                                                <button 
+                                                    type="button" 
+                                                    onClick={handleAddPerson} 
+                                                    className="bg-emerald-500 hover:bg-emerald-600 text-white p-2 rounded-full shadow-sm transition active:scale-95 flex items-center justify-center"
+                                                >
+                                                    <Icons.Check className="w-4 h-4" />
+                                                </button>
                                             </div>
-                                        ) : !isDeleteMode && <button type="button" onClick={() => setIsAddingPerson(true)} className="px-3 py-2 rounded-full text-sm font-medium transition-all flex items-center justify-center gap-1 border border-dashed border-slate-300 text-slate-400 hover:text-indigo-500 hover:border-indigo-300 active:scale-95"><Icons.Plus className="w-4 h-4" /></button>}
+                                        ) : !isDeleteMode && (
+                                            <button 
+                                                type="button" 
+                                                onClick={() => setIsAddingPerson(true)} 
+                                                className="px-3 py-2 rounded-full text-sm font-medium transition-all flex items-center justify-center gap-1 border border-dashed border-slate-300 text-slate-400 hover:text-indigo-500 hover:border-indigo-300 active:scale-95"
+                                            >
+                                                <Icons.Plus className="w-4 h-4" />
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
 
@@ -565,8 +625,8 @@
 
                         {/* List & Analytics Tab */}
                         <div className="bg-slate-50">
-                            {/* Analytics (Pie Chart) moved to bottom of list for better flow? No, keep here for overview. */}
-                            {items.length > 0 && <div className="border-b border-slate-100 bg-white pt-2"><PieChart data={categoryDataAll} /></div>}
+                            {/* Analytics (Pie Chart) */}
+                            {items.length > 0 && <div className="border-b border-slate-100 bg-white pt-2"><PieChart data={categoryData} /></div>}
 
                             {/* Item List */}
                             <div className="max-h-80 overflow-y-auto p-4 space-y-2">
@@ -579,7 +639,10 @@
                                                 <h3 className="font-medium text-slate-700 truncate">{item.name}</h3>
                                                 <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
                                                     <span className="flex items-center gap-1 bg-slate-50 px-2 py-0.5 rounded-md"><Icons.Calendar className="w-3 h-3"/> {formatDate(item.date)}</span>
-                                                    <span className="truncate">{getAssigneeText(item.assignedTo)}</span>
+                                                    <span className="truncate flex items-center gap-1">
+                                                        <Icons.Wallet className="w-3 h-3 text-indigo-400"/>
+                                                        {people.find(p => p.id === item.paidBy)?.name || 'Unknown'} จ่าย
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -598,23 +661,35 @@
                         {/* Summary Dashboard */}
                         <div className="bg-slate-800 text-white p-6">
                             <div className="flex justify-between items-center mb-4 border-b border-slate-700 pb-4">
-                                <div><p className="text-slate-400 text-xs uppercase tracking-wider">ยอดที่จ่ายทั้งหมด</p><p className="text-2xl font-bold text-white">{(totalTripForeign * currencyRate).toLocaleString(undefined, {maximumFractionDigits:0})} <span className="text-sm font-normal text-slate-500">THB</span></p></div>
-                                <div className="text-right"><p className="text-slate-400 text-xs uppercase tracking-wider">ยอดที่แชร์กับเพื่อน</p><p className="text-lg font-medium text-indigo-300">{(totalSharedForeign * currencyRate).toLocaleString(undefined, {maximumFractionDigits:0})} THB</p></div>
+                                <div><p className="text-slate-400 text-xs uppercase tracking-wider">ยอดรวมทั้งทริป</p><p className="text-2xl font-bold text-white">{(totalTripForeign * currencyRate).toLocaleString(undefined, {maximumFractionDigits:0})} <span className="text-sm font-normal text-slate-500">THB</span></p></div>
+                                <div className="text-right"><p className="text-slate-400 text-xs uppercase tracking-wider">จำนวนรายการ</p><p className="text-lg font-medium text-indigo-300">{items.length} รายการ</p></div>
                             </div>
-                            <h3 className="text-sm font-bold text-slate-300 mb-3 uppercase tracking-wider">ใครต้องคืนเงินเราบ้าง?</h3>
-                            <div className="grid gap-3 mb-6">
-                                {people.filter(p => !p.isMe).map(person => {
-                                    const debt = calculatePersonDebt(person.id);
-                                    return (
-                                        <div key={person.id} className="bg-white/5 p-3 rounded-xl flex justify-between items-center border border-white/5">
-                                            <div className="flex items-center gap-2"><div className={`w-3 h-3 rounded-full ${getPersonColor(person.id)}`}></div><span className="font-medium text-slate-200">{person.name}</span></div>
-                                            <div className="text-right"><span className="text-xl font-bold text-emerald-400">{debt.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</span><span className="text-xs text-slate-500 ml-1">THB</span></div>
-                                        </div>
-                                    );
-                                })}
-                                {people.filter(p => !p.isMe).length === 0 && <div className="text-center text-slate-500 text-sm py-2">เพิ่มสมาชิกเพื่อเริ่มคำนวณ</div>}
+                            
+                            <h3 className="text-sm font-bold text-slate-300 mb-3 uppercase tracking-wider">สรุปการโอน (ใครต้องให้ใคร)</h3>
+                            <div className="space-y-2 mb-6">
+                                {transactions.length === 0 ? (
+                                    <div className="text-center text-slate-500 text-sm py-2">ยังไม่มีรายการ หรือเคลียร์กันหมดแล้ว</div>
+                                ) : (
+                                    transactions.map((t, idx) => {
+                                        const fromPerson = people.find(p => p.id === t.from);
+                                        const toPerson = people.find(p => p.id === t.to);
+                                        return (
+                                            <div key={idx} className="bg-white/5 p-3 rounded-xl flex justify-between items-center border border-white/5">
+                                                <div className="flex items-center gap-2 text-sm">
+                                                    <span className="font-bold text-slate-200">{fromPerson?.name}</span>
+                                                    <span className="text-slate-500"><Icons.ArrowRight className="w-4 h-4 inline" /></span>
+                                                    <span className="font-bold text-emerald-400">{toPerson?.name}</span>
+                                                </div>
+                                                <div className="text-right">
+                                                    <span className="text-lg font-bold text-indigo-300">{t.amount.toLocaleString(undefined, {maximumFractionDigits:0})}</span>
+                                                    <span className="text-xs text-slate-500 ml-1">THB</span>
+                                                </div>
+                                            </div>
+                                        );
+                                    })
+                                )}
                             </div>
-                            <button onClick={() => setShowSlip(true)} className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition shadow-lg shadow-indigo-900/30 active:scale-95"><Icons.Share className="w-5 h-5" /> สรุปยอดแชร์เพื่อน</button>
+                            <button onClick={() => setShowSlip(true)} className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition shadow-lg shadow-indigo-900/30 active:scale-95"><Icons.Receipt className="w-5 h-5" /> ดูสลิปสรุปยอด</button>
                         </div>
                     </div>
                     
@@ -628,7 +703,7 @@
                                     <h3 className="font-bold text-slate-700">สลิปสรุปยอด</h3>
                                     <button onClick={() => setShowSlip(false)} className="text-slate-400 hover:text-slate-600 p-1"><Icons.X className="w-6 h-6" /></button>
                                 </div>
-                                <div ref={slipRef} className="bg-white p-6 overflow-y-auto no-scrollbar">
+                                <div ref={slipRef} className="bg-white p-6 overflow-y-auto no-scrollbar slip-content">
                                     <div className="text-center border-b border-slate-100 pb-6 mb-6">
                                         <div className="flex justify-center mb-3"><div className="bg-indigo-50 p-3 rounded-full"><Icons.Receipt className="w-8 h-8 text-indigo-500" /></div></div>
                                         <h2 className="text-xl font-bold text-slate-800 uppercase tracking-wide">Expense Summary</h2>
@@ -639,19 +714,17 @@
                                         </div>
                                     </div>
 
-                                    {/* Pie Chart in Slip (Uses filtered data) */}
+                                    {/* Pie Chart in Slip */}
                                     <div className="mb-6 flex justify-center border-b border-slate-100 pb-4">
-                                        <PieChart data={categoryDataSlip} />
+                                        <PieChart data={categoryData} />
                                     </div>
 
-                                    {/* Categorized List (Filtered: Shared Only) */}
+                                    {/* Categorized List */}
                                     <div className="mb-6 bg-slate-50 rounded-xl p-4">
-                                        <h3 className="text-xs font-bold text-slate-400 uppercase mb-3 tracking-wider">
-                                            รายการทั้งหมด
-                                        </h3>
+                                        <h3 className="text-xs font-bold text-slate-400 uppercase mb-3 tracking-wider">รายละเอียดรายการ (ตามหมวดหมู่)</h3>
                                         <div className="space-y-4">
-                                            {Object.entries(getGroupedItems(slipItems)).length === 0 ? <p className="text-xs text-center text-slate-400 italic">ไม่มีรายการที่จะแสดง</p> : 
-                                                Object.entries(getGroupedItems(slipItems)).map(([catId, groupItems]) => (
+                                            {Object.entries(getGroupedItemsByCategory()).length === 0 ? <p className="text-xs text-center text-slate-400 italic">ยังไม่มีรายการกองกลาง</p> : 
+                                                Object.entries(getGroupedItemsByCategory()).map(([catId, groupItems]) => (
                                                     <div key={catId}>
                                                         <div className="flex items-center gap-1 mb-2 text-xs font-semibold text-slate-500">
                                                             <span>{CATEGORIES[catId].icon}</span> <span>{CATEGORIES[catId].label}</span>
@@ -661,6 +734,13 @@
                                                                 <div key={idx} className="flex items-center justify-between text-xs pb-1 last:pb-0 gap-3">
                                                                     <div className="flex items-center gap-2 min-w-0 flex-1">
                                                                         <span className="font-medium text-slate-600 truncate">{group.displayName}</span>
+                                                                        {/* Payer Badge with Color Dot */}
+                                                                        <div className="flex items-center gap-1 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
+                                                                            <div className={`w-2 h-2 rounded-full ${getPersonColor(group.paidBy)}`}></div>
+                                                                            <span className="text-[9px] text-slate-500 whitespace-nowrap">
+                                                                                {people.find(p=>p.id===group.paidBy)?.name} จ่าย
+                                                                            </span>
+                                                                        </div>
                                                                         {group.count > 1 && <span className="text-[10px] bg-slate-200 text-slate-500 px-1.5 rounded-full whitespace-nowrap">x{group.count}</span>}
                                                                         <div className="flex -space-x-1 shrink-0">{group.assignedTo.map(pid => (<div key={pid} className={`w-2.5 h-2.5 rounded-full border border-white ${getPersonColor(pid)}`}></div>))}</div>
                                                                     </div>
@@ -677,21 +757,30 @@
                                     <div className="mb-6">
                                         <h3 className="text-xs font-bold text-slate-400 uppercase mb-3 tracking-wider">ยอดที่ต้องคืน</h3>
                                         <div className="space-y-2">
-                                            {people.filter(p => !p.isMe).map(person => (
-                                                <div key={person.id} className="flex justify-between items-center bg-indigo-50 p-3 rounded-lg border border-indigo-100">
-                                                    <div className="flex items-center gap-2"><div className={`w-3 h-3 rounded-full ${getPersonColor(person.id)}`}></div><span className="font-medium text-slate-700">{person.name}</span></div>
-                                                    <span className="font-bold text-lg text-indigo-600">{calculatePersonDebt(person.id).toLocaleString(undefined, {maximumFractionDigits:0})} <span className="text-xs font-normal text-slate-400">THB</span></span>
-                                                </div>
-                                            ))}
+                                            {transactions.length === 0 ? <p className="text-center text-slate-500 text-xs italic">ไม่มียอดค้างชำระ</p> : transactions.map((t, idx) => {
+                                                const fromPerson = people.find(p => p.id === t.from);
+                                                const toPerson = people.find(p => p.id === t.to);
+                                                return (
+                                                    <div key={idx} className="flex justify-between items-center bg-indigo-50 p-3 rounded-lg border border-indigo-100 text-sm">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="font-bold text-slate-700">{fromPerson?.name}</span>
+                                                            <span className="text-slate-400 text-xs">โอนให้</span>
+                                                            <span className="font-bold text-indigo-600">{toPerson?.name}</span>
+                                                        </div>
+                                                        <span className="font-bold text-slate-700">{t.amount.toLocaleString(undefined, {maximumFractionDigits:0})} <span className="text-xs font-normal text-slate-400">THB</span></span>
+                                                    </div>
+                                                );
+                                            })}
                                         </div>
                                     </div>
+
                                     <div className="text-center text-xs text-slate-500 border-t border-slate-100 pt-4">
-                                        <span className="block mb-1 uppercase tracking-wider">รวมยอดแชร์ทั้งหมด</span>
-                                        <span className="font-mono font-bold text-xl text-indigo-500">{(totalSharedForeign * currencyRate).toLocaleString()} <span className="text-sm font-normal text-slate-400">THB</span></span>
+                                        <span className="block mb-1 uppercase tracking-wider">รวมค่าใช้จ่ายทั้งทริป</span>
+                                        <span className="font-mono font-bold text-xl text-indigo-500">{(totalTripForeign * currencyRate).toLocaleString()} <span className="text-sm font-normal text-slate-400">THB</span></span>
                                     </div>
                                 </div>
                                 <div className="p-4 bg-slate-50 border-t border-slate-100 flex gap-3">
-                                    <button onClick={handleCopyText} className="flex-1 bg-white hover:bg-slate-50 text-indigo-600 border border-indigo-200 font-medium py-3 rounded-xl flex items-center justify-center gap-2 transition active:scale-95"><Icons.Copy className="w-4 h-4" /> คัดลอกรายการ</button>
+                                    <button onClick={handleCopyText} className="flex-1 bg-white hover:bg-slate-50 text-indigo-600 border border-indigo-200 font-medium py-3 rounded-xl flex items-center justify-center gap-2 transition active:scale-95"><Icons.Copy className="w-4 h-4" /> คัดลอกข้อความ</button>
                                 </div>
                             </div>
                         </div>
